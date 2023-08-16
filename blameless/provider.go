@@ -2,6 +2,7 @@ package blameless
 
 import (
 	"github.com/blamelesshq/terraform-provider/internal/config"
+	"github.com/blamelesshq/terraform-provider/internal/resource/organization"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
@@ -11,6 +12,8 @@ func Provider() *schema.Provider {
 			"instance": {
 				Type:        schema.TypeString,
 				Optional:    false,
+				Required:    true,
+				Computed:    false,
 				DefaultFunc: schema.EnvDefaultFunc("BLAMELESS_INSTANCE", nil),
 				Description: "Your Blameless instance URL. " +
 					"It can also be sourced from the `BLAMELESS_INSTANCE` environment variable.",
@@ -18,12 +21,16 @@ func Provider() *schema.Provider {
 			"key": {
 				Type:        schema.TypeString,
 				Optional:    false,
+				Required:    true,
+				Computed:    false,
 				DefaultFunc: schema.EnvDefaultFunc("BLAMELESS_KEY", nil),
 				Description: "Your Blameless API key. " +
 					"It can also be sourced from the `BLAMELESS_KEY` environment variable.",
 			},
 		},
-		ResourcesMap:   map[string]*schema.Resource{},
+		ResourcesMap: map[string]*schema.Resource{
+			organization.GetResourceKey(): organization.NewResource(),
+		},
 		DataSourcesMap: map[string]*schema.Resource{},
 	}
 	provider.ConfigureContextFunc = config.ConfigureProvider(&provider.TerraformVersion)

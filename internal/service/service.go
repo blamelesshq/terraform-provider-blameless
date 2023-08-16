@@ -1,15 +1,24 @@
 package service
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
+	"net/http"
 
+	"github.com/blamelesshq/terraform-provider/internal/model"
 	"github.com/hashicorp/go-retryablehttp"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/meta"
 )
 
-type Service interface{}
+type Service interface {
+	GetOrgSettings() (*model.OrgSettings, error)
+	CreateOrgSettings(settings *model.OrgSettings) error
+	UpdateOrgSettings(settings *model.OrgSettings) error
+	DeleteOrgSettings() error
+}
 
 type Svc struct {
 	key      string
@@ -34,34 +43,73 @@ func (s *Svc) Client() *retryablehttp.Client {
 	return s.client
 }
 
-func (s *Svc) authToken() (*string, error) {
-	if s.token == nil {
-		target := fmt.Sprintf("%s/api/v2/identity/token", s.instance)
-		request, err := retryablehttp.NewRequest("POST", target, nil)
-		if err != nil {
-			return nil, err
-		}
-		request.Header.Add("Authorization", s.key)
-		request.Header.Add("User-Agent", userAgent())
-		resp, err := s.client.Do(request)
-		if err != nil {
-			return nil, err
-		}
+func getSettings[TResponse interface{}](svc *Svc, section string) (*TResponse, error) {
+	return callSettings[struct{}, TResponse](svc, section, http.MethodGet, nil)
+}
 
-		defer resp.Body.Close()
-		body, err := io.ReadAll(resp.Body)
+func createSettings[TRequest interface{}](svc *Svc, section string, req *TRequest) error {
+	_, err := callSettings[TRequest, struct{}](svc, section, http.MethodPost, req)
+	return err
+}
+
+func updateSettings[TRequest interface{}](svc *Svc, section string, req *TRequest) error {
+	_, err := callSettings[TRequest, struct{}](svc, section, http.MethodPut, req)
+	return err
+}
+
+func deleteSettings(svc *Svc, section string) error {
+	_, err := callSettings[struct{}, struct{}](svc, section, http.MethodDelete, nil)
+	return err
+}
+
+func callSettings[TRequest interface{}, TResponse interface{}](svc *Svc, section string, method string, req *TRequest) (*TResponse, error) {
+	target := fmt.Sprintf("%s/api/v2/settings/%s", svc.Instance(), section)
+	var payload interface{} = nil
+	if req != nil {
+		r, err := json.Marshal(req)
 		if err != nil {
 			return nil, err
 		}
+		payload = bytes.NewReader(r)
+	}
 
-		var response tokenResponse
+	request, err := retryablehttp.NewRequest(method, target, payload)
+	if err != nil {
+		log.Printf("new request error: %+v", err)
+		return nil, err
+	}
+	token, err := svc.authToken()
+	if err != nil {
+		log.Printf("auth token error: %+v", err)
+		return nil, err
+	}
+	request.Header.Add("Authorization", *token)
+	request.Header.Add("User-Agent", userAgent())
+
+	resp, err := svc.Client().Do(request)
+	if err != nil {
+		log.Printf("do request error: %+v", err)
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Printf("read body error: %+v", err)
+		return nil, err
+	}
+
+	if len(body) > 0 {
+		var response TResponse
 		err = json.Unmarshal(body, &response)
 		if err != nil {
+			log.Printf("json unmarshal error: %+v", err)
 			return nil, err
 		}
-		s.token = &response.AccessToken
+		return &response, nil
 	}
-	return s.token, nil
+
+	return nil, nil
 }
 
 func userAgent() string {
