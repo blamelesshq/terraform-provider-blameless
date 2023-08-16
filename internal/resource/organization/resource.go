@@ -6,9 +6,6 @@ import (
 	"strings"
 
 	"github.com/blamelesshq/terraform-provider/internal/config"
-	"github.com/blamelesshq/terraform-provider/internal/model"
-	"github.com/blamelesshq/terraform-provider/internal/value"
-	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -85,56 +82,6 @@ func NewResource() *schema.Resource {
 	}
 }
 
-func expandSettings(config cty.Value) *model.OrgSettings {
-	settings := &model.OrgSettings{
-		Name:          value.String(config.GetAttr("name")),
-		Timezone:      value.String(config.GetAttr("timezone")),
-		Description:   value.String(config.GetAttr("description")),
-		IncidentRoles: expandIncidentRoles(config.GetAttr("incident_roles")),
-		Severities:    expandIncidentSeverties(config.GetAttr("incident_severities")),
-	}
-	return settings
-}
-
-func expandIncidentRoles(roles cty.Value) []string {
-	incidentRoles := make([]string, roles.LengthInt())
-	if roles.IsNull() {
-		return nil
-	}
-	roles.ForEachElement(func(key, val cty.Value) (stop bool) {
-		incidentRoles = append(incidentRoles, value.String(val))
-		return stop
-	})
-	return incidentRoles
-}
-
-func expandIncidentSeverties(severities cty.Value) []*model.IncidentSeverity {
-	var results []*model.IncidentSeverity
-	severities.ForEachElement(func(_, sev cty.Value) (stop bool) {
-		results = []*model.IncidentSeverity{
-			{
-				Level: 0,
-				Label: value.String(sev.GetAttr("sev0_label")),
-			},
-			{
-				Level: 1,
-				Label: value.String(sev.GetAttr("sev1_label")),
-			},
-			{
-				Level: 2,
-				Label: value.String(sev.GetAttr("sev2_label")),
-			},
-			{
-				Level: 3,
-				Label: value.String(sev.GetAttr("sev3_label")),
-			},
-		}
-		return stop
-	})
-
-	return results
-}
-
 func createAction(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
@@ -161,7 +108,7 @@ func readAction(_ context.Context, d *schema.ResourceData, m interface{}) diag.D
 		d.Set("timezone", orgSettings.Timezone),
 		d.Set("description", orgSettings.Description),
 		d.Set("incident_roles", strings.Join(orgSettings.IncidentRoles, ",")),
-		d.Set("incident_severities", orgSettings.Severities),
+		d.Set("incident_severities", flattenIncidentSeverities(orgSettings.Severities)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

@@ -9,7 +9,7 @@ Generate an API token in the Blamless Identity Management - Key Management secti
 1. Putting the values in a `.tfvars` file
 
 ```
-instance = "https://instance.blameless-dev.io"
+instance = "https://{{instance}}.blameless-dev.io"
 key = "123qwe"
 ```
 
