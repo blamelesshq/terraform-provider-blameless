@@ -1,5 +1,7 @@
 package service
 
 const (
-	sectionOrg = "org"
+	sectionOrg              = "org"
+	sectionIncidentRole     = "incidents/roles"
+	sectionIncidentSeverity = "incidents/severities"
 )

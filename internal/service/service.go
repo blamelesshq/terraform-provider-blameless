@@ -15,9 +15,13 @@ import (
 
 type Service interface {
 	GetOrgSettings() (*model.OrgSettings, error)
-	CreateOrgSettings(settings *model.OrgSettings) error
 	UpdateOrgSettings(settings *model.OrgSettings) error
-	DeleteOrgSettings() error
+
+	GetIncidentRoleSettings() (*model.IncidentRoleSettings, error)
+	UpdateIncidentRoleSettings(settings *model.IncidentRoleSettings) error
+
+	GetIncidentSeveritySettings() (*model.IncidentSeveritySettings, error)
+	UpdateIncidentSeveritySettings(settings *model.IncidentSeveritySettings) error
 }
 
 type Svc struct {

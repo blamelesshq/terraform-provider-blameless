@@ -3,12 +3,17 @@ provider "blameless" {
   key = var.blameless_key
 }
 
-resource "blameless_organization" "org_settings" {
+resource "blameless_org_settings" "org_settings" {
   name = "swat-2"
   timezone = "US/Pacific"
-  description = "swat-2 desc"
-  incident_roles = ["Commander", "Communication lead"]
-  incident_severities {
+}
+
+resource "blameless_incident_role_settings" "role_settings" {
+  roles = ["Commander", "Communication lead"]
+}
+
+resource "blameless_incident_severity_settings" "sev_settings" {
+  severities {
     sev0_label = "SEV0"
     sev1_label = "SEV1"
     sev2_label = "SEV2"

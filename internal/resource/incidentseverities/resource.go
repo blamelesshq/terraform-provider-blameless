@@ -1,4 +1,4 @@
-package organization
+package incidentseverities
 
 import (
 	"context"
@@ -12,7 +12,7 @@ import (
 )
 
 func GetResourceKey() string {
-	return "blameless_org_settings"
+	return "blameless_incident_severity_settings"
 }
 
 func NewResource() *schema.Resource {
@@ -26,15 +26,33 @@ func NewResource() *schema.Resource {
 		},
 		Description: "",
 		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "The name of the organization.",
-			},
-			"timezone": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "Timezone specifier",
+			"severities": {
+				Type:     schema.TypeSet,
+				Required: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"sev0_label": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "The trigger ID.",
+						},
+						"sev1_label": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "The trigger ID.",
+						},
+						"sev2_label": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "The trigger ID.",
+						},
+						"sev3_label": {
+							Type:        schema.TypeString,
+							Required:    true,
+							Description: "The trigger ID.",
+						},
+					},
+				},
 			},
 		},
 	}
@@ -43,8 +61,8 @@ func NewResource() *schema.Resource {
 func create(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	orgSettings := expandSettings(d.GetRawConfig())
-	if err := api.UpdateOrgSettings(orgSettings); err != nil {
+	settings := expandSettings(d.GetRawConfig())
+	if err := api.UpdateIncidentSeveritySettings(settings); err != nil {
 		log.Printf("create error: %+v", err)
 		return diag.FromErr(err)
 	}
@@ -55,16 +73,14 @@ func create(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 func read(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	orgSettings, err := api.GetOrgSettings()
+	settings, err := api.GetIncidentSeveritySettings()
 	if err != nil {
 		log.Printf("read error: %+v", err)
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
-		d.Set("name", orgSettings.Name),
-		d.Set("timezone", orgSettings.Timezone),
-		d.Set("description", orgSettings.Description),
+		d.Set("severities", flattenIncidentSeverities(settings)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -73,8 +89,8 @@ func read(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnos
 func update(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	orgSettings := expandSettings(d.GetRawConfig())
-	if err := api.UpdateOrgSettings(orgSettings); err != nil {
+	settings := expandSettings(d.GetRawConfig())
+	if err := api.UpdateIncidentSeveritySettings(settings); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -84,7 +100,7 @@ func update(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 func delete(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.UpdateIncidentRoleSettings(&model.IncidentRoleSettings{}); err != nil {
+	if err := api.UpdateIncidentSeveritySettings(&model.IncidentSeveritySettings{}); err != nil {
 		return diag.FromErr(err)
 	}
 

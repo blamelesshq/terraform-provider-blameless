@@ -1,8 +1,9 @@
-package organization
+package incidentroles
 
 import (
 	"context"
 	"log"
+	"strings"
 
 	"github.com/blamelesshq/terraform-provider/internal/config"
 	"github.com/blamelesshq/terraform-provider/internal/model"
@@ -12,7 +13,7 @@ import (
 )
 
 func GetResourceKey() string {
-	return "blameless_org_settings"
+	return "blameless_incident_role_settings"
 }
 
 func NewResource() *schema.Resource {
@@ -26,15 +27,13 @@ func NewResource() *schema.Resource {
 		},
 		Description: "",
 		Schema: map[string]*schema.Schema{
-			"name": {
-				Type:        schema.TypeString,
+			"roles": {
+				Type:        schema.TypeList,
 				Required:    true,
-				Description: "The name of the organization.",
-			},
-			"timezone": {
-				Type:        schema.TypeString,
-				Required:    true,
-				Description: "Timezone specifier",
+				Description: "List of incident roles.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 			},
 		},
 	}
@@ -43,8 +42,8 @@ func NewResource() *schema.Resource {
 func create(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	orgSettings := expandSettings(d.GetRawConfig())
-	if err := api.UpdateOrgSettings(orgSettings); err != nil {
+	settings := expandSettings(d.GetRawConfig())
+	if err := api.UpdateIncidentRoleSettings(settings); err != nil {
 		log.Printf("create error: %+v", err)
 		return diag.FromErr(err)
 	}
@@ -55,16 +54,14 @@ func create(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 func read(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	orgSettings, err := api.GetOrgSettings()
+	settings, err := api.GetIncidentRoleSettings()
 	if err != nil {
 		log.Printf("read error: %+v", err)
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
-		d.Set("name", orgSettings.Name),
-		d.Set("timezone", orgSettings.Timezone),
-		d.Set("description", orgSettings.Description),
+		d.Set("incident_roles", strings.Join(settings.IncidentRoles, ",")),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -73,8 +70,8 @@ func read(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnos
 func update(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	orgSettings := expandSettings(d.GetRawConfig())
-	if err := api.UpdateOrgSettings(orgSettings); err != nil {
+	settings := expandSettings(d.GetRawConfig())
+	if err := api.UpdateIncidentRoleSettings(settings); err != nil {
 		return diag.FromErr(err)
 	}
 
