@@ -8,7 +8,7 @@ import (
 
 func expandSettings(config cty.Value) *model.IncidentRoleSettings {
 	settings := &model.IncidentRoleSettings{
-		IncidentRoles: expandIncidentRoles(config.GetAttr("incident_roles")),
+		IncidentRoles: expandIncidentRoles(config.GetAttr("roles")),
 	}
 	return settings
 }

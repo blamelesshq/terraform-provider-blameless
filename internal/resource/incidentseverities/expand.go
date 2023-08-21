@@ -8,7 +8,7 @@ import (
 
 func expandSettings(config cty.Value) *model.IncidentSeveritySettings {
 	settings := &model.IncidentSeveritySettings{
-		Severities: expandIncidentSeverties(config.GetAttr("incident_severities")),
+		Severities: expandIncidentSeverties(config.GetAttr("severities")),
 	}
 	return settings
 }
