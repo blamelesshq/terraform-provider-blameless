@@ -51,20 +51,22 @@ func getSettings[TResponse interface{}](svc *Svc, section string) (*TResponse, e
 	return callSettings[struct{}, TResponse](svc, section, http.MethodGet, nil)
 }
 
-func createSettings[TRequest interface{}](svc *Svc, section string, req *TRequest) error {
-	_, err := callSettings[TRequest, struct{}](svc, section, http.MethodPost, req)
-	return err
-}
+// TODO uncomment for incident types
+// func createSettings[TRequest interface{}](svc *Svc, section string, req *TRequest) error {
+// 	_, err := callSettings[TRequest, struct{}](svc, section, http.MethodPost, req)
+// 	return err
+// }
 
 func updateSettings[TRequest interface{}](svc *Svc, section string, req *TRequest) error {
 	_, err := callSettings[TRequest, struct{}](svc, section, http.MethodPut, req)
 	return err
 }
 
-func deleteSettings(svc *Svc, section string) error {
-	_, err := callSettings[struct{}, struct{}](svc, section, http.MethodDelete, nil)
-	return err
-}
+// TODO uncomment for incident types
+// func deleteSettings(svc *Svc, section string) error {
+// 	_, err := callSettings[struct{}, struct{}](svc, section, http.MethodDelete, nil)
+// 	return err
+// }
 
 func callSettings[TRequest interface{}, TResponse interface{}](svc *Svc, section string, method string, req *TRequest) (*TResponse, error) {
 	target := fmt.Sprintf("%s/api/v2/settings/%s", svc.Instance(), section)

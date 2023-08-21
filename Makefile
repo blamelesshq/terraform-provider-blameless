@@ -18,3 +18,6 @@ install: build
 
 test: 
 	go test -bench=. -cover ./...                                                             
+
+lint:
+	golangci-lint run
