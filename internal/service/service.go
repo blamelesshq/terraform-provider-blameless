@@ -70,6 +70,7 @@ func updateSettings[TRequest interface{}](svc *Svc, section string, req *TReques
 
 func callSettings[TRequest interface{}, TResponse interface{}](svc *Svc, section string, method string, req *TRequest) (*TResponse, error) {
 	target := fmt.Sprintf("%s/api/v2/settings/%s", svc.Instance(), section)
+
 	var payload interface{} = nil
 	if req != nil {
 		r, err := json.Marshal(req)
@@ -77,17 +78,18 @@ func callSettings[TRequest interface{}, TResponse interface{}](svc *Svc, section
 			return nil, err
 		}
 		payload = bytes.NewReader(r)
+		fmt.Printf("request: %s", string(r))
 	}
 
 	request, err := retryablehttp.NewRequest(method, target, payload)
 	if err != nil {
 		log.Printf("new request error: %+v", err)
-		return nil, err
+		return nil, fmt.Errorf("internal service error. code: 1")
 	}
 	token, err := svc.authToken()
 	if err != nil {
 		log.Printf("auth token error: %+v", err)
-		return nil, err
+		return nil, fmt.Errorf("internal service error. code: 2")
 	}
 	request.Header.Add("Authorization", *token)
 	request.Header.Add("User-Agent", userAgent())
@@ -95,22 +97,22 @@ func callSettings[TRequest interface{}, TResponse interface{}](svc *Svc, section
 	resp, err := svc.Client().Do(request)
 	if err != nil {
 		log.Printf("do request error: %+v", err)
-		return nil, err
+		return nil, fmt.Errorf("internal service error. code: 3")
 	}
 
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Printf("read body error: %+v", err)
-		return nil, err
+		return nil, fmt.Errorf("internal service error. code: 4")
 	}
 
 	if len(body) > 0 {
 		var response TResponse
 		err = json.Unmarshal(body, &response)
 		if err != nil {
-			log.Printf("json unmarshal error: %+v", err)
-			return nil, err
+			log.Printf("json unmarshal error: %+v\n%s", err, string(body))
+			return nil, fmt.Errorf("internal service error. code: 5")
 		}
 		return &response, nil
 	}

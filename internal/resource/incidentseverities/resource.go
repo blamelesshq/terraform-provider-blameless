@@ -2,6 +2,7 @@ package incidentseverities
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/blamelesshq/terraform-provider/internal/config"
@@ -83,6 +84,7 @@ func read(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnos
 		d.Set("severities", flattenIncidentSeverities(settings)),
 	)
 
+	d.SetId(fmt.Sprint(len(settings.Severities)))
 	return diag.FromErr(result.ErrorOrNil())
 }
 
@@ -104,5 +106,6 @@ func delete(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 		return diag.FromErr(err)
 	}
 
+	d.SetId("")
 	return nil
 }

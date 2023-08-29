@@ -6,7 +6,7 @@ This provider allow use Terraform to handle Blameless resources.
 
 Generate an API token in the Blamless Identity Management - Key Management section. Then please provide your API key and instance URL by:
 
-1. Putting the values in a `.tfvars` file
+1. Putting the values in a `terraform.tfvars` file
 
 ```
 instance = "https://{{instance}}.blameless-dev.io"

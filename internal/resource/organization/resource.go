@@ -2,7 +2,6 @@ package organization
 
 import (
 	"context"
-	"log"
 
 	"github.com/blamelesshq/terraform-provider/internal/config"
 	"github.com/blamelesshq/terraform-provider/internal/model"
@@ -45,9 +44,10 @@ func create(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 
 	orgSettings := expandSettings(d.GetRawConfig())
 	if err := api.UpdateOrgSettings(orgSettings); err != nil {
-		log.Printf("create error: %+v", err)
 		return diag.FromErr(err)
 	}
+
+	d.SetId(orgSettings.Name)
 
 	return read(ctx, d, m)
 }
@@ -57,14 +57,12 @@ func read(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnos
 
 	orgSettings, err := api.GetOrgSettings()
 	if err != nil {
-		log.Printf("read error: %+v", err)
 		return diag.FromErr(err)
 	}
 
 	result := multierror.Append(
 		d.Set("name", orgSettings.Name),
 		d.Set("timezone", orgSettings.Timezone),
-		d.Set("description", orgSettings.Description),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())
@@ -87,6 +85,8 @@ func delete(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 	if err := api.UpdateIncidentRoleSettings(&model.IncidentRoleSettings{}); err != nil {
 		return diag.FromErr(err)
 	}
+
+	d.SetId("")
 
 	return nil
 }

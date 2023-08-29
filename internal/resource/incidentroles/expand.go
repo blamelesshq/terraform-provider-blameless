@@ -8,7 +8,7 @@ import (
 
 func expandSettings(config cty.Value) *model.IncidentRoleSettings {
 	settings := &model.IncidentRoleSettings{
-		IncidentRoles: expandIncidentRoles(config.GetAttr("roles")),
+		Roles: expandIncidentRoles(config.GetAttr("roles")),
 	}
 	return settings
 }
@@ -18,9 +18,13 @@ func expandIncidentRoles(roles cty.Value) []string {
 	if roles.IsNull() {
 		return nil
 	}
+
+	i := 0
 	roles.ForEachElement(func(key, val cty.Value) (stop bool) {
-		incidentRoles = append(incidentRoles, value.String(val))
+		incidentRoles[i] = value.String(val)
+		i++
 		return stop
 	})
+	
 	return incidentRoles
 }

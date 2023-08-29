@@ -3,6 +3,7 @@ package incidentroles
 import (
 	"context"
 	"log"
+	"sort"
 	"strings"
 
 	"github.com/blamelesshq/terraform-provider/internal/config"
@@ -41,29 +42,26 @@ func NewResource() *schema.Resource {
 
 func create(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-
 	settings := expandSettings(d.GetRawConfig())
 	if err := api.UpdateIncidentRoleSettings(settings); err != nil {
-		log.Printf("create error: %+v", err)
+		log.Printf("create error: %+v\n", err)
 		return diag.FromErr(err)
 	}
-
+	sort.Strings(settings.Roles)
+	d.SetId(strings.Join(settings.Roles, ","))
 	return read(ctx, d, m)
 }
 
 func read(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-
 	settings, err := api.GetIncidentRoleSettings()
 	if err != nil {
-		log.Printf("read error: %+v", err)
+		log.Printf("read error: %+v\n", err)
 		return diag.FromErr(err)
 	}
-
 	result := multierror.Append(
-		d.Set("incident_roles", strings.Join(settings.IncidentRoles, ",")),
+		d.Set("roles", settings.Roles),
 	)
-
 	return diag.FromErr(result.ErrorOrNil())
 }
 
@@ -85,5 +83,6 @@ func delete(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 		return diag.FromErr(err)
 	}
 
+	d.SetId("")
 	return nil
 }
