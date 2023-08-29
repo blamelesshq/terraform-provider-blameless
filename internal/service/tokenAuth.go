@@ -39,7 +39,6 @@ func (s *Svc) authToken() (*string, error) {
 		}
 		s.token = &response.AccessToken
 	}
-	tkn := ""
-	s.token = &tkn
+
 	return s.token, nil
 }

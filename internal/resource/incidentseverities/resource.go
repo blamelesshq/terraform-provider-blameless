@@ -83,7 +83,6 @@ func read(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnos
 	result := multierror.Append(
 		d.Set("severities", flattenIncidentSeverities(settings)),
 	)
-
 	d.SetId(fmt.Sprint(len(settings.Severities)))
 	return diag.FromErr(result.ErrorOrNil())
 }

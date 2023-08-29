@@ -4,7 +4,7 @@ provider "blameless" {
 }
 
 resource "blameless_org_settings" "org_settings" {
-  name     = "swat-2"
+  name     = "local"
   timezone = "US/Pacific"
 }
 
