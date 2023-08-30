@@ -14,6 +14,12 @@ type tokenResponse struct {
 
 func (s *Svc) authToken() (*string, error) {
 	if s.token == nil {
+		s.mu.Lock()
+		defer s.mu.Unlock()
+		if s.token != nil {
+			return s.token, nil
+		}
+
 		target := fmt.Sprintf("%s/api/v2/identity/token", s.instance)
 		request, err := retryablehttp.NewRequest("POST", target, nil)
 		if err != nil {
