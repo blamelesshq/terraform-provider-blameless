@@ -1,5 +1,5 @@
-HOSTNAME=blameless.io
-NAMESPACE=io
+HOSTNAME=registry.terraform.io
+NAMESPACE=blameless
 NAME=blameless
 BINARY=terraform-provider-${NAME}
 VERSION=1.0.0
@@ -22,3 +22,7 @@ test:
 
 lint:
 	golangci-lint run
+	tflint --chdir=./modules
+
+doc:
+	go generate ./...

@@ -1,0 +1,29 @@
+---
+page_title: "Provider: {{title .ProviderShortName}}"
+description: |-
+  The Blameless provider is used to interact with Blameless APIs.
+---
+
+# {{title .ProviderShortName}} Provider
+
+The Blameless provider is used to interact with the Blameless API inorder to configure a Blameless tenant.
+
+It provides resources that allow you to create and manage settings as part of a Terraform deployment.
+
+Use the navigation to the left to read about the available resources.
+
+## Example Usage
+
+{{ tffile "examples/provider/provider.tf" }}
+
+{{ .SchemaMarkdown | trimspace }}
+
+## Environment Variables
+
+You can provide your credentials via the `BLAMELESS_INSTANCE` and `BLAMELESS_KEY` environment variables.
+
+{{ tffile "examples/provider/provider_with_env_vars.tf" }}
+
+### Example Usage
+
+{{ codefile "shell" "examples/provider/usage_with_env_vars.sh" }}
