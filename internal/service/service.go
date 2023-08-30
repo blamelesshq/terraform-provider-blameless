@@ -97,14 +97,14 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 
 	resp, err := svc.Client().Do(request)
 	if err != nil {
-		tflog.Debug(ctx, fmt.Sprintf("do request error: %+v", err))
+		tflog.Debug(ctx, fmt.Sprintf("do request error: %+v", err), map[string]interface{}{ "method": method, "target": target, "payload": fmt.Sprint(r)})
 		return nil, fmt.Errorf("internal service error. code: 3")
 	}
 
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		tflog.Debug(ctx, fmt.Sprintf("read body error: %+v", err))
+		tflog.Debug(ctx, fmt.Sprintf("read body error: %+v", err), map[string]interface{}{ "method": method, "target": target, "payload": fmt.Sprint(r)})
 		return nil, fmt.Errorf("internal service error. code: 4")
 	}
 
@@ -112,7 +112,7 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 		var response TResponse
 		err = json.Unmarshal(body, &response)
 		if err != nil {
-			tflog.Debug(ctx, fmt.Sprintf("json unmarshal error: %+v\n%s", err, string(body)))
+			tflog.Debug(ctx, fmt.Sprintf("json unmarshal error: %+v", err), map[string]interface{}{"body": string(body)})
 			return nil, fmt.Errorf("internal service error. code: 5")
 		}
 		return &response, nil
