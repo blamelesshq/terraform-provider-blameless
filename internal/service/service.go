@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"sync"
 
 	"github.com/blamelesshq/terraform-provider/internal/model"
 	"github.com/hashicorp/go-retryablehttp"
@@ -30,6 +31,7 @@ type Svc struct {
 	instance string
 	client   *retryablehttp.Client
 	token    *string
+	mu       sync.Mutex
 }
 
 func New(key, instance string) Service {
