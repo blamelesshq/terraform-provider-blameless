@@ -26,11 +26,12 @@ func NewResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
-		Description: "",
+		Description: "Incident Roles",
 		Schema: map[string]*schema.Schema{
 			"roles": {
 				Type:        schema.TypeList,
 				Required:    true,
+				MinItems:    1,
 				Description: "List of incident roles.",
 				Elem: &schema.Schema{
 					Type: schema.TypeString,

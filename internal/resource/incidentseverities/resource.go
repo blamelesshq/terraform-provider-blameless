@@ -10,6 +10,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func GetResourceKey() string {
@@ -25,31 +26,36 @@ func NewResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
-		Description: "",
+		Description: "Incident Severities",
 		Schema: map[string]*schema.Schema{
 			"severities": {
 				Type:     schema.TypeSet,
+				MaxItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"sev0_label": {
 							Type:        schema.TypeString,
 							Required:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
 							Description: "The trigger ID.",
 						},
 						"sev1_label": {
 							Type:        schema.TypeString,
 							Required:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
 							Description: "The trigger ID.",
 						},
 						"sev2_label": {
 							Type:        schema.TypeString,
 							Required:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
 							Description: "The trigger ID.",
 						},
 						"sev3_label": {
 							Type:        schema.TypeString,
 							Required:    true,
+							ValidateFunc: validation.StringIsNotEmpty,
 							Description: "The trigger ID.",
 						},
 					},

@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func GetResourceKey() string {
@@ -23,16 +24,18 @@ func NewResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
-		Description: "",
+		Description: "Organization Settings",
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:        schema.TypeString,
 				Required:    true,
+				ValidateFunc: validation.StringIsNotEmpty,
 				Description: "The name of the organization.",
 			},
 			"timezone": {
 				Type:        schema.TypeString,
 				Required:    true,
+				ValidateFunc: validation.StringIsNotEmpty,
 				Description: "Timezone specifier",
 			},
 		},
