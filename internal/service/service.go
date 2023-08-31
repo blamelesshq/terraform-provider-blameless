@@ -114,7 +114,7 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 		var response TResponse
 		err = json.Unmarshal(body, &response)
 		if err != nil {
-			tflog.Debug(ctx, fmt.Sprintf("json unmarshal error: %+v", err), map[string]interface{}{"body": string(body)})
+			tflog.Debug(ctx, fmt.Sprintf("json unmarshal error: %+v", err), map[string]interface{}{"response body": string(body)})
 			return nil, fmt.Errorf("internal service error. code: 5")
 		}
 		return &response, nil
