@@ -3,7 +3,6 @@ package incidentseverities
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/blamelesshq/terraform-provider/internal/config"
 	"github.com/blamelesshq/terraform-provider/internal/model"
@@ -69,20 +68,18 @@ func create(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 	api := m.(*config.Config).GetAPI()
 
 	settings := expandSettings(d.GetRawConfig())
-	if err := api.UpdateIncidentSeveritySettings(settings); err != nil {
-		log.Printf("create error: %+v", err)
+	if err := api.UpdateIncidentSeveritySettings(ctx, settings); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return read(ctx, d, m)
 }
 
-func read(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func read(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	settings, err := api.GetIncidentSeveritySettings()
+	settings, err := api.GetIncidentSeveritySettings(ctx)
 	if err != nil {
-		log.Printf("read error: %+v", err)
 		return diag.FromErr(err)
 	}
 
@@ -97,17 +94,17 @@ func update(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 	api := m.(*config.Config).GetAPI()
 
 	settings := expandSettings(d.GetRawConfig())
-	if err := api.UpdateIncidentSeveritySettings(settings); err != nil {
+	if err := api.UpdateIncidentSeveritySettings(ctx, settings); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return read(ctx, d, m)
 }
 
-func delete(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func delete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.UpdateIncidentSeveritySettings(&model.IncidentSeveritySettings{}); err != nil {
+	if err := api.UpdateIncidentSeveritySettings(ctx, &model.IncidentSeveritySettings{}); err != nil {
 		return diag.FromErr(err)
 	}
 

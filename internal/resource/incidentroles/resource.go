@@ -2,7 +2,6 @@ package incidentroles
 
 import (
 	"context"
-	"log"
 	"sort"
 	"strings"
 
@@ -44,8 +43,7 @@ func NewResource() *schema.Resource {
 func create(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 	settings := expandSettings(d.GetRawConfig())
-	if err := api.UpdateIncidentRoleSettings(settings); err != nil {
-		log.Printf("create error: %+v\n", err)
+	if err := api.UpdateIncidentRoleSettings(ctx, settings); err != nil {
 		return diag.FromErr(err)
 	}
 	sort.Strings(settings.Roles)
@@ -53,11 +51,10 @@ func create(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 	return read(ctx, d, m)
 }
 
-func read(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func read(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
-	settings, err := api.GetIncidentRoleSettings()
+	settings, err := api.GetIncidentRoleSettings(ctx)
 	if err != nil {
-		log.Printf("read error: %+v\n", err)
 		return diag.FromErr(err)
 	}
 	result := multierror.Append(
@@ -70,17 +67,17 @@ func update(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 	api := m.(*config.Config).GetAPI()
 
 	settings := expandSettings(d.GetRawConfig())
-	if err := api.UpdateIncidentRoleSettings(settings); err != nil {
+	if err := api.UpdateIncidentRoleSettings(ctx, settings); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return read(ctx, d, m)
 }
 
-func delete(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func delete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.UpdateIncidentRoleSettings(&model.IncidentRoleSettings{}); err != nil {
+	if err := api.UpdateIncidentRoleSettings(ctx, &model.IncidentRoleSettings{}); err != nil {
 		return diag.FromErr(err)
 	}
 

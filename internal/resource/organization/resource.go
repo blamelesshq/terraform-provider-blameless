@@ -46,7 +46,7 @@ func create(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 	api := m.(*config.Config).GetAPI()
 
 	orgSettings := expandSettings(d.GetRawConfig())
-	if err := api.UpdateOrgSettings(orgSettings); err != nil {
+	if err := api.UpdateOrgSettings(ctx, orgSettings); err != nil {
 		return diag.FromErr(err)
 	}
 
@@ -55,10 +55,10 @@ func create(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 	return read(ctx, d, m)
 }
 
-func read(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func read(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	orgSettings, err := api.GetOrgSettings()
+	orgSettings, err := api.GetOrgSettings(ctx)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -75,17 +75,17 @@ func update(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 	api := m.(*config.Config).GetAPI()
 
 	orgSettings := expandSettings(d.GetRawConfig())
-	if err := api.UpdateOrgSettings(orgSettings); err != nil {
+	if err := api.UpdateOrgSettings(ctx, orgSettings); err != nil {
 		return diag.FromErr(err)
 	}
 
 	return read(ctx, d, m)
 }
 
-func delete(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
+func delete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.UpdateIncidentRoleSettings(&model.IncidentRoleSettings{}); err != nil {
+	if err := api.UpdateIncidentRoleSettings(ctx, &model.IncidentRoleSettings{}); err != nil {
 		return diag.FromErr(err)
 	}
 
