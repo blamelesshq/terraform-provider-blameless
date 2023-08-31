@@ -2,35 +2,22 @@
 
 This provider allow use Terraform to handle Blameless resources.
 
+## Setup
 
+Generate an API token in the Blamless Identity Management - Key Management section. Then please provide your API key and instance URL by:
 
-
-## Example Usage
-
-Terraform 0.13 and later:
-
-```
-terraform {
-  required_providers {
-    blameless = {
-      source  = "blameless"
-      version = "~> 1.0"
-    }
-  }
-}
-```
-
-## Authentication
-
-Client id will be provide by our CS Team.
-
-Generate an API token on the Blamless identity Management - Key Management section.
-
-Then please provide youur client id and token.
+1. Putting the values in a `terraform.tfvars` file
 
 ```
-provider "blameless" {
-    client_id = var.blameless_client_id
-    client_secret = var.blameless_client_secret
-}
+instance = "https://{{instance}}.blameless-dev.io"
+key = "123qwe"
 ```
+
+2. Setting the environment variables `BLAMELESS_INSTANCE` and `BLAMELESS_KEY`
+
+## Local Testing
+
+1. Run `make install` in the root directory
+2. Go to the `modules` directory
+3. Run `terraform init`
+4. Run `terraform plan`, `terraform validate`, or `terraform apply`
