@@ -94,7 +94,7 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 		tflog.Debug(ctx, fmt.Sprintf("auth token error: %+v", err))
 		return nil, fmt.Errorf("internal service error. code: 2")
 	}
-	request.Header.Add("Authorization", *token)
+	request.Header.Add("Authorization", fmt.Sprintf("Bearer %s", *token))
 	request.Header.Add("User-Agent", userAgent())
 
 	resp, err := svc.Client().Do(request)
