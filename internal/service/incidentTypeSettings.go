@@ -12,7 +12,7 @@ func (s *Svc) GetIncidentTypeSettings(ctx context.Context, id string) (*model.In
 }
 
 func (s *Svc) CreateIncidentTypeSettings(ctx context.Context, settings *model.IncidentTypeSettings) (string, error) {
-	resp, err := createSettingsWithResponse[model.IncidentTypeSettings, model.IncidentTypeSettings](ctx, s, sectionIncidentType, settings)
+	resp, err := createSettings[model.IncidentTypeSettings, model.IncidentTypeSettings](ctx, s, sectionIncidentType, settings)
 	if err != nil {
 		return "", err
 	}

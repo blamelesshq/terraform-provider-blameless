@@ -63,12 +63,7 @@ func getSettings[TResponse interface{}](ctx context.Context, svc *Svc, section s
 	return callSettings[struct{}, TResponse](ctx, svc, section, http.MethodGet, nil)
 }
 
-func createSettings[TRequest interface{}](ctx context.Context, svc *Svc, section string, req *TRequest) error {
-	_, err := callSettings[TRequest, struct{}](ctx, svc, section, http.MethodPost, req)
-	return err
-}
-
-func createSettingsWithResponse[TRequest interface{}, TResponse interface{}](ctx context.Context, svc *Svc, section string, req *TRequest) (*TResponse, error) {
+func createSettings[TRequest interface{}, TResponse interface{}](ctx context.Context, svc *Svc, section string, req *TRequest) (*TResponse, error) {
 	resp, err := callSettings[TRequest, TResponse](ctx, svc, section, http.MethodPost, req)
 	return resp, err
 }
