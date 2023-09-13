@@ -24,7 +24,7 @@ func NewResource() *schema.Resource {
 		Importer: &schema.ResourceImporter{
 			StateContext: schema.ImportStatePassthroughContext,
 		},
-		Description: "Incident Roles\n{{TODO  singe use desc}}",
+		Description: "Incident Roles",
 		Schema: map[string]*schema.Schema{
 			"roles": {
 				Type:        schema.TypeList,
