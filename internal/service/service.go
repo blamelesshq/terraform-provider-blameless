@@ -24,6 +24,11 @@ type Service interface {
 
 	GetIncidentSeveritySettings(ctx context.Context) (*model.IncidentSeveritySettings, error)
 	UpdateIncidentSeveritySettings(ctx context.Context, settings *model.IncidentSeveritySettings) error
+
+	GetIncidentTypeSettings(ctx context.Context, id string) (*model.IncidentTypeSettings, error)
+	CreateIncidentTypeSettings(ctx context.Context, settings *model.IncidentTypeSettings) (string, error)
+	UpdateIncidentTypeSettings(ctx context.Context, id string, settings *model.IncidentTypeSettings) error
+	DeleteIncidentTypeSettings(ctx context.Context, id string) error
 }
 
 type Svc struct {
@@ -32,6 +37,10 @@ type Svc struct {
 	client   *retryablehttp.Client
 	token    *string
 	mu       sync.Mutex
+}
+
+type svcError struct {
+	Message string `json:"message"`
 }
 
 func New(key, instance string) Service {
@@ -54,25 +63,28 @@ func getSettings[TResponse interface{}](ctx context.Context, svc *Svc, section s
 	return callSettings[struct{}, TResponse](ctx, svc, section, http.MethodGet, nil)
 }
 
-// TODO uncomment for incident types
-// func createSettings[TRequest interface{}](ctx context.Context, svc *Svc, section string, req *TRequest) error {
-// 	_, err := callSettings[TRequest, struct{}](ctx, svc, section, http.MethodPost, req)
-// 	return err
-// }
+func createSettings[TRequest interface{}](ctx context.Context, svc *Svc, section string, req *TRequest) error {
+	_, err := callSettings[TRequest, struct{}](ctx, svc, section, http.MethodPost, req)
+	return err
+}
+
+func createSettingsWithResponse[TRequest interface{}, TResponse interface{}](ctx context.Context, svc *Svc, section string, req *TRequest) (*TResponse, error) {
+	resp, err := callSettings[TRequest, TResponse](ctx, svc, section, http.MethodPost, req)
+	return resp, err
+}
 
 func updateSettings[TRequest interface{}](ctx context.Context, svc *Svc, section string, req *TRequest) error {
 	_, err := callSettings[TRequest, struct{}](ctx, svc, section, http.MethodPut, req)
 	return err
 }
 
-// TODO uncomment for incident types
-// func deleteSettings(ctx context.Context, svc *Svc, section string) error {
-// 	_, err := callSettings[struct{}, struct{}](ctx, svc, section, http.MethodDelete, nil)
-// 	return err
-// }
+func deleteSettings[TId interface{}](ctx context.Context, svc *Svc, section string, id TId) error {
+	_, err := callSettings[struct{}, struct{}](ctx, svc, fmt.Sprintf("%s/%v", section, id), http.MethodDelete, nil)
+	return err
+}
 
-func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Context, svc *Svc, section string, method string, req *TRequest) (*TResponse, error) {
-	target := fmt.Sprintf("%s/api/v2/settings/%s", svc.Instance(), section)
+func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Context, svc *Svc, path string, method string, req *TRequest) (*TResponse, error) {
+	target := fmt.Sprintf("%s/api/v2/settings/%s", svc.Instance(), path)
 
 	var payload interface{} = nil
 	r := ""
@@ -86,7 +98,7 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 
 	request, err := retryablehttp.NewRequest(method, target, payload)
 	if err != nil {
-		tflog.Debug(ctx, fmt.Sprintf("new request error: %+v", err), map[string]interface{}{ "method": method, "target": target, "payload": fmt.Sprint(r)})
+		tflog.Debug(ctx, fmt.Sprintf("new request error: %+v", err), map[string]interface{}{"method": method, "target": target, "payload": fmt.Sprint(r)})
 		return nil, fmt.Errorf("internal service error. code: 1")
 	}
 	token, err := svc.authToken()
@@ -99,15 +111,28 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 
 	resp, err := svc.Client().Do(request)
 	if err != nil {
-		tflog.Debug(ctx, fmt.Sprintf("do request error: %+v", err), map[string]interface{}{ "method": method, "target": target, "payload": fmt.Sprint(r)})
+		tflog.Debug(ctx, fmt.Sprintf("do request error: %+v", err), map[string]interface{}{"method": method, "target": target, "payload": fmt.Sprint(r)})
 		return nil, fmt.Errorf("internal service error. code: 3")
 	}
 
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		tflog.Debug(ctx, fmt.Sprintf("read body error: %+v", err), map[string]interface{}{ "method": method, "target": target, "payload": fmt.Sprint(r)})
+		tflog.Debug(ctx, fmt.Sprintf("read body error: %+v", err), map[string]interface{}{"method": method, "target": target, "payload": fmt.Sprint(r)})
 		return nil, fmt.Errorf("internal service error. code: 4")
+	}
+
+	if resp.StatusCode < 200 || resp.StatusCode > 300 {
+		errorMessage := string(body)
+		var serviceError svcError
+		err = json.Unmarshal(body, &serviceError)
+		if err != nil {
+			tflog.Debug(ctx, fmt.Sprintf("unable to unmarshal service error: %v", err))
+		} else {
+			errorMessage = serviceError.Message
+		}
+
+		return nil, fmt.Errorf("%s - %s", resp.Status, errorMessage)
 	}
 
 	if len(body) > 0 {

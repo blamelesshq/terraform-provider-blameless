@@ -17,12 +17,13 @@ this provider, copy and paste the following code into your Terraform configurati
 ```terraform
 terraform {
   required_providers {
-    auth0 = {
+    blameless = {
+      version = "~> 1.0.0"
       source  = "blameless/blameless"
-      version = ">= 0.1.0" # Refer to releases for latest version
     }
   }
 }
+
 
 provider "blameless" {
   instance = var.blameless_instance
@@ -41,8 +42,8 @@ Generate an API token in the Blamless Identity Management - Key Management secti
 1. Putting the values in a `terraform.tfvars` file
 
 ```terraform
-instance = "{{blameless_instance}}"
-key      = "{{blameless_api_key}}"
+blameless_instance = "{{blameless_instance}}"
+blameless_key      = "{{blameless_api_key}}"
 ```
 
 2. Setting the environment variables `BLAMELESS_INSTANCE` and `BLAMELESS_KEY`
