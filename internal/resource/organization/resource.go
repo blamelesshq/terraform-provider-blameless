@@ -7,12 +7,13 @@ import (
 	"github.com/blamelesshq/terraform-provider/internal/model"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/id"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 )
 
 func GetResourceKey() string {
-	return "blameless_org_settings"
+	return "blameless_organization"
 }
 
 func NewResource() *schema.Resource {
@@ -27,16 +28,16 @@ func NewResource() *schema.Resource {
 		Description: "Organization Settings",
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:        schema.TypeString,
-				Required:    true,
+				Type:         schema.TypeString,
+				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
-				Description: "The name of the organization.",
+				Description:  "The name of the organization.",
 			},
 			"timezone": {
-				Type:        schema.TypeString,
-				Required:    true,
+				Type:         schema.TypeString,
+				Required:     true,
 				ValidateFunc: validation.StringIsNotEmpty,
-				Description: "Timezone specifier",
+				Description:  "Timezone specifier",
 			},
 		},
 	}
@@ -50,7 +51,7 @@ func create(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 		return diag.FromErr(err)
 	}
 
-	d.SetId(orgSettings.Name)
+	d.SetId(id.UniqueId())
 
 	return read(ctx, d, m)
 }

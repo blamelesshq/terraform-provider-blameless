@@ -10,3 +10,12 @@ func String(rawValue cty.Value) string {
 	}
 	return rawValue.AsString()
 }
+
+func Bool(rawValue cty.Value) *bool {
+	if rawValue.IsNull() {
+		return nil
+	}
+
+	value := rawValue.True()
+	return &value
+}
