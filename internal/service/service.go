@@ -24,6 +24,9 @@ type Service interface {
 
 	GetIncidentSeveritySettings(ctx context.Context) (*model.IncidentSeveritySettings, error)
 	UpdateIncidentSeveritySettings(ctx context.Context, settings *model.IncidentSeveritySettings) error
+
+	GetIncidentTypeSeveritySettings(ctx context.Context) (*model.IncidentTypeSeverity, error)
+	UpdateIncidentTypeSeveritySettings(ctx context.Context, settings *model.IncidentTypeSeverity) error
 }
 
 type Svc struct {
@@ -86,7 +89,7 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 
 	request, err := retryablehttp.NewRequest(method, target, payload)
 	if err != nil {
-		tflog.Debug(ctx, fmt.Sprintf("new request error: %+v", err), map[string]interface{}{ "method": method, "target": target, "payload": fmt.Sprint(r)})
+		tflog.Debug(ctx, fmt.Sprintf("new request error: %+v", err), map[string]interface{}{"method": method, "target": target, "payload": fmt.Sprint(r)})
 		return nil, fmt.Errorf("internal service error. code: 1")
 	}
 	token, err := svc.authToken()
@@ -99,14 +102,14 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 
 	resp, err := svc.Client().Do(request)
 	if err != nil {
-		tflog.Debug(ctx, fmt.Sprintf("do request error: %+v", err), map[string]interface{}{ "method": method, "target": target, "payload": fmt.Sprint(r)})
+		tflog.Debug(ctx, fmt.Sprintf("do request error: %+v", err), map[string]interface{}{"method": method, "target": target, "payload": fmt.Sprint(r)})
 		return nil, fmt.Errorf("internal service error. code: 3")
 	}
 
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		tflog.Debug(ctx, fmt.Sprintf("read body error: %+v", err), map[string]interface{}{ "method": method, "target": target, "payload": fmt.Sprint(r)})
+		tflog.Debug(ctx, fmt.Sprintf("read body error: %+v", err), map[string]interface{}{"method": method, "target": target, "payload": fmt.Sprint(r)})
 		return nil, fmt.Errorf("internal service error. code: 4")
 	}
 

@@ -4,6 +4,7 @@ import (
 	"github.com/blamelesshq/terraform-provider/internal/config"
 	"github.com/blamelesshq/terraform-provider/internal/resource/incidentroles"
 	"github.com/blamelesshq/terraform-provider/internal/resource/incidentseverities"
+	"github.com/blamelesshq/terraform-provider/internal/resource/incidenttypeseverity"
 	"github.com/blamelesshq/terraform-provider/internal/resource/organization"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -31,9 +32,10 @@ func Provider() *schema.Provider {
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
-			organization.GetResourceKey():       organization.NewResource(),
-			incidentseverities.GetResourceKey(): incidentseverities.NewResource(),
-			incidentroles.GetResourceKey():      incidentroles.NewResource(),
+			organization.GetResourceKey():         organization.NewResource(),
+			incidentseverities.GetResourceKey():   incidentseverities.NewResource(),
+			incidentroles.GetResourceKey():        incidentroles.NewResource(),
+			incidenttypeseverity.GetResourceKey(): incidenttypeseverity.NewResource(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{},
 	}
