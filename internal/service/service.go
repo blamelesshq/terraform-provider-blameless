@@ -39,10 +39,6 @@ type Svc struct {
 	mu       sync.Mutex
 }
 
-type svcError struct {
-	Message string `json:"message"`
-}
-
 func New(key, instance string) Service {
 	return &Svc{
 		key:      key,
