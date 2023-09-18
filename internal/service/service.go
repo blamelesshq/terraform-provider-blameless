@@ -25,6 +25,11 @@ type Service interface {
 	GetIncidentSeveritySettings(ctx context.Context) (*model.IncidentSeveritySettings, error)
 	UpdateIncidentSeveritySettings(ctx context.Context, settings *model.IncidentSeveritySettings) error
 
+	GetIncidentTypeSettings(ctx context.Context, id string) (*model.IncidentTypeSettings, error)
+	CreateIncidentTypeSettings(ctx context.Context, settings *model.IncidentTypeSettings) (string, error)
+	UpdateIncidentTypeSettings(ctx context.Context, id string, settings *model.IncidentTypeSettings) error
+	DeleteIncidentTypeSettings(ctx context.Context, id string) error
+
 	GetIncidentTypeSeveritySettings(ctx context.Context) (*model.IncidentTypeSeverity, error)
 	UpdateIncidentTypeSeveritySettings(ctx context.Context, settings *model.IncidentTypeSeverity) error
 }
@@ -57,25 +62,27 @@ func getSettings[TResponse interface{}](ctx context.Context, svc *Svc, section s
 	return callSettings[struct{}, TResponse](ctx, svc, section, http.MethodGet, nil)
 }
 
-// TODO uncomment for incident types
-// func createSettings[TRequest interface{}](ctx context.Context, svc *Svc, section string, req *TRequest) error {
-// 	_, err := callSettings[TRequest, struct{}](ctx, svc, section, http.MethodPost, req)
-// 	return err
-// }
+func createSettings[TRequest interface{}, TResponse interface{}](ctx context.Context, svc *Svc, section string, req *TRequest) (*TResponse, error) {
+	resp, err := callSettings[TRequest, TResponse](ctx, svc, section, http.MethodPost, req)
+	return resp, err
+}
 
 func updateSettings[TRequest interface{}](ctx context.Context, svc *Svc, section string, req *TRequest) error {
 	_, err := callSettings[TRequest, struct{}](ctx, svc, section, http.MethodPut, req)
 	return err
 }
 
-// TODO uncomment for incident types
-// func deleteSettings(ctx context.Context, svc *Svc, section string) error {
-// 	_, err := callSettings[struct{}, struct{}](ctx, svc, section, http.MethodDelete, nil)
-// 	return err
-// }
+func deleteSettings[TId interface{}](ctx context.Context, svc *Svc, section string, id TId) error {
+	_, err := callSettings[struct{}, struct{}](ctx, svc, fmt.Sprintf("%s/%v", section, id), http.MethodDelete, nil)
+	return err
+}
 
-func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Context, svc *Svc, section string, method string, req *TRequest) (*TResponse, error) {
-	target := fmt.Sprintf("%s/api/v2/settings/%s", svc.Instance(), section)
+type errorResponse struct {
+	Message string `json:"message"`
+}
+
+func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Context, svc *Svc, path string, method string, req *TRequest) (*TResponse, error) {
+	target := fmt.Sprintf("%s/api/v2/settings/%s", svc.Instance(), path)
 
 	var payload interface{} = nil
 	r := ""
@@ -111,6 +118,15 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 	if err != nil {
 		tflog.Debug(ctx, fmt.Sprintf("read body error: %+v", err), map[string]interface{}{"method": method, "target": target, "payload": fmt.Sprint(r)})
 		return nil, fmt.Errorf("internal service error. code: 4")
+	}
+
+	if resp.StatusCode == http.StatusUnprocessableEntity {
+		errResp := errorResponse{}
+		err = json.Unmarshal(body, &errResp)
+		if err != nil {
+			tflog.Debug(ctx, fmt.Sprintf("error json unmarshal error: %+v", err), map[string]interface{}{"response body": string(body)})
+		}
+		return nil, fmt.Errorf("%s", errResp.Message)
 	}
 
 	if len(body) > 0 {
