@@ -23,6 +23,10 @@ Scan through our existing issues to find one that interests you. If you find an 
 3. Run `terraform init`
 4. Run `terraform plan`, `terraform validate`, or `terraform apply`
 
+### Documentation
+
+Before committing your changes, remember to run `make doc` to capture any changes to the provider or resources in the documentation.
+
 ### Pull Request
 
 When you're finished with the changes, create a pull request, also known as a PR.

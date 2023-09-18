@@ -78,6 +78,10 @@ func deleteSettings[TId interface{}](ctx context.Context, svc *Svc, section stri
 	return err
 }
 
+type errorResponse struct {
+	Message string `json:"message"`
+}
+
 func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Context, svc *Svc, path string, method string, req *TRequest) (*TResponse, error) {
 	target := fmt.Sprintf("%s/api/v2/settings/%s", svc.Instance(), path)
 
@@ -117,17 +121,13 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 		return nil, fmt.Errorf("internal service error. code: 4")
 	}
 
-	if resp.StatusCode < 200 || resp.StatusCode > 300 {
-		errorMessage := string(body)
-		var serviceError svcError
-		err = json.Unmarshal(body, &serviceError)
+	if resp.StatusCode == http.StatusUnprocessableEntity {
+		errResp := errorResponse{}
+		err = json.Unmarshal(body, &errResp)
 		if err != nil {
-			tflog.Debug(ctx, fmt.Sprintf("unable to unmarshal service error: %v", err))
-		} else {
-			errorMessage = serviceError.Message
+			tflog.Debug(ctx, fmt.Sprintf("error json unmarshal error: %+v", err), map[string]interface{}{"response body": string(body)})
 		}
-
-		return nil, fmt.Errorf("%s - %s", resp.Status, errorMessage)
+		return nil, fmt.Errorf("%s", errResp.Message)
 	}
 
 	if len(body) > 0 {
