@@ -1,4 +1,4 @@
-resource "blameless_org_settings" "org_settings" {
+resource "blameless_organization" "org_settings" {
   name     = "{{organization name}}"
   timezone = "{{organization timezone}}"
   # Example Timezones:

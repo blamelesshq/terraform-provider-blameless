@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/blamelesshq/terraform-provider/internal/config"
+	"github.com/blamelesshq/terraform-provider/internal/model"
 	"github.com/hashicorp/go-multierror"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -36,6 +37,38 @@ func NewResource() *schema.Resource {
 				Required:    true,
 				Description: "Active/Inactive",
 			},
+			"severity0_settings": {
+				Type:        schema.TypeSet,
+				MaxItems:    1,
+				Required:    false,
+				Optional:    true,
+				Description: "Severity 0 configuration",
+				Elem:        getIncidentSeverityResource(),
+			},
+			"severity1_settings": {
+				Type:        schema.TypeSet,
+				MaxItems:    1,
+				Required:    false,
+				Optional:    true,
+				Description: "Severity 1 configuration",
+				Elem:        getIncidentSeverityResource(),
+			},
+			"severity2_settings": {
+				Type:        schema.TypeSet,
+				MaxItems:    1,
+				Required:    false,
+				Optional:    true,
+				Description: "Severity 2 configuration",
+				Elem:        getIncidentSeverityResource(),
+			},
+			"severity3_settings": {
+				Type:        schema.TypeSet,
+				MaxItems:    1,
+				Required:    false,
+				Optional:    true,
+				Description: "Severity 3 configuration",
+				Elem:        getIncidentSeverityResource(),
+			},
 		},
 	}
 }
@@ -61,9 +94,35 @@ func read(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 		return diag.FromErr(err)
 	}
 
+	var sev0 *model.IncidentTypeSeverity
+	var sev1 *model.IncidentTypeSeverity
+	var sev2 *model.IncidentTypeSeverity
+	var sev3 *model.IncidentTypeSeverity
+
+	for _, setting := range settings.Severities {
+		if setting.Severity == nil {
+			continue
+		}
+
+		switch *setting.Severity {
+		case 0:
+			sev0 = setting
+		case 1:
+			sev1 = setting
+		case 2:
+			sev2 = setting
+		case 3:
+			sev3 = setting
+		}
+	}
+
 	result := multierror.Append(
 		d.Set("name", settings.Name),
 		d.Set("active", settings.Active),
+		d.Set("severity0_settings", flattenIncidentSeverity(sev0)),
+		d.Set("severity1_settings", flattenIncidentSeverity(sev1)),
+		d.Set("severity2_settings", flattenIncidentSeverity(sev2)),
+		d.Set("severity3_settings", flattenIncidentSeverity(sev3)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

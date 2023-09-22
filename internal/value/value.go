@@ -31,10 +31,10 @@ func Int(rawValue cty.Value) *int {
 }
 
 func StringArray(rawValue cty.Value) []string {
-	results := make([]string, rawValue.LengthInt())
 	if rawValue.IsNull() {
 		return nil
 	}
+	results := make([]string, rawValue.LengthInt())
 
 	i := 0
 	rawValue.ForEachElement(func(key, val cty.Value) (stop bool) {
