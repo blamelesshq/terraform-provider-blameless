@@ -4,11 +4,12 @@ import (
 	"github.com/hashicorp/go-cty/cty"
 )
 
-func String(rawValue cty.Value) string {
+func String(rawValue cty.Value) *string {
 	if rawValue.IsNull() {
-		return ""
+		return nil
 	}
-	return rawValue.AsString()
+	val := rawValue.AsString()
+	return &val
 }
 
 func Bool(rawValue cty.Value) *bool {
@@ -38,7 +39,12 @@ func StringArray(rawValue cty.Value) []string {
 
 	i := 0
 	rawValue.ForEachElement(func(key, val cty.Value) (stop bool) {
-		results[i] = String(val)
+		v := String(val)
+		result := ""
+		if v != nil {
+			result = *v
+		}
+		results[i] = result
 		i++
 		return stop
 	})

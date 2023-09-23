@@ -19,19 +19,19 @@ func expandIncidentSeverties(severities cty.Value) []*model.IncidentSeverity {
 		results = []*model.IncidentSeverity{
 			{
 				Level: 0,
-				Label: value.String(sev.GetAttr("sev0_label")),
+				Label: *value.String(sev.GetAttr("sev0_label")),
 			},
 			{
 				Level: 1,
-				Label: value.String(sev.GetAttr("sev1_label")),
+				Label: *value.String(sev.GetAttr("sev1_label")),
 			},
 			{
 				Level: 2,
-				Label: value.String(sev.GetAttr("sev2_label")),
+				Label: *value.String(sev.GetAttr("sev2_label")),
 			},
 			{
 				Level: 3,
-				Label: value.String(sev.GetAttr("sev3_label")),
+				Label: *value.String(sev.GetAttr("sev3_label")),
 			},
 		}
 		return stop

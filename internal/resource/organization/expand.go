@@ -8,8 +8,8 @@ import (
 
 func expandSettings(config cty.Value) *model.OrgSettings {
 	settings := &model.OrgSettings{
-		Name:     value.String(config.GetAttr("name")),
-		Timezone: value.String(config.GetAttr("timezone")),
+		Name:     *value.String(config.GetAttr("name")),
+		Timezone: *value.String(config.GetAttr("timezone")),
 	}
 	return settings
 }

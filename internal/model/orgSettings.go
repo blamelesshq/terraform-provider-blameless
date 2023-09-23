@@ -1,6 +1,6 @@
 package model
 
 type OrgSettings struct {
-	Name        string `json:"name"`
-	Timezone    string `json:"timezone"`
+	Name     string `json:"name"`
+	Timezone string `json:"timezone"`
 }

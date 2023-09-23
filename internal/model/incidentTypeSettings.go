@@ -15,16 +15,16 @@ type IncidentTypeSeverity struct {
 }
 
 type IncidentTypeSeverityIncidentSettings struct {
-	EndOfCustomerImpactStatus string                                        `json:"endOfCustomerImpactStatus,omitempty"`
+	EndOfCustomerImpactStatus *string                                       `json:"endOfCustomerImpactStatus,omitempty"`
 	PrivateIncidentChannel    *bool                                         `json:"privateIncidentChannel,omitempty"`
 	ChannelNaming             *IncidentTypeSeverityIncidentChannelNaming    `json:"channelNaming,omitempty"`
 	TeamNotifications         *IncidentTypeSeverityIncidentTeamNotification `json:"teamNotifications,omitempty"`
 }
 
 type IncidentTypeSeverityIncidentChannelNaming struct {
-	IncidentNamingScheme string `json:"incidentNamingScheme,omitempty"`
-	CustomChannelFormat  string `json:"customChannelFormat,omitempty"`
-	RequireDashSeparator *bool  `json:"requireDashSeparator,omitempty"`
+	IncidentNamingScheme *string `json:"incidentNamingScheme,omitempty"`
+	CustomChannelFormat  *string `json:"customChannelFormat,omitempty"`
+	RequireDashSeparator *bool   `json:"requireDashSeparator,omitempty"`
 }
 
 type IncidentTypeSeverityIncidentTeamNotification struct {
@@ -33,21 +33,21 @@ type IncidentTypeSeverityIncidentTeamNotification struct {
 }
 
 type IncidentTypeSeverityRetrospectiveSettings struct {
-	Required                   *bool  `json:"required,omitempty"`
-	IncidentResolutionRequired *bool  `json:"incidentResolutionRequired,omitempty"`
-	DailyReminder              *bool  `json:"dailyReminder,omitempty"`
-	AnalysisTemplate           string `json:"analysisTemplate,omitempty"`
-	QuestionnaireTemplate      string `json:"questionnaireTemplate,omitempty"`
+	Required                   *bool   `json:"required,omitempty"`
+	IncidentResolutionRequired *bool   `json:"incidentResolutionRequired,omitempty"`
+	DailyReminder              *bool   `json:"dailyReminder,omitempty"`
+	AnalysisTemplate           *string `json:"analysisTemplate,omitempty"`
+	QuestionnaireTemplate      *string `json:"questionnaireTemplate,omitempty"`
 }
 
 type IncidentTypeSeverityTaskSettings struct {
-	FullPermissionRole string                          `json:"fullPermissionRole,omitempty"`
+	FullPermissionRole *string                         `json:"fullPermissionRole,omitempty"`
 	TaskList           []*IncidentSeverityTypeTaskList `json:"taskList,omitempty"`
 }
 
 type IncidentSeverityTypeTaskList struct {
-	IncidentStatus string `json:"incidentStatus,omitempty"`
-	Name           string `json:"name,omitempty"`
-	Required       *bool  `json:"required,omitempty"`
-	Role           string `json:"role,omitempty"`
+	IncidentStatus *string `json:"incidentStatus,omitempty"`
+	Name           *string `json:"name,omitempty"`
+	Required       *bool   `json:"required,omitempty"`
+	Role           *string `json:"role,omitempty"`
 }

@@ -8,6 +8,13 @@ import (
 func getIncidentSeverityResource() *schema.Resource {
 	return &schema.Resource{
 		Schema: map[string]*schema.Schema{
+			"severity": {
+				Type:         schema.TypeInt,
+				Required:     true,
+				Optional:     false,
+				ValidateFunc: validation.IntAtLeast(0),
+				Description:  "Severity level.",
+			},
 			"end_of_customer_impact_status": {
 				Type:         schema.TypeString,
 				Required:     false,

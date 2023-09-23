@@ -7,7 +7,8 @@ resource "blameless_incident_type" "incident_type_security" {
   name   = "Security"
   active = true
 
-  severity0_settings {
+  severity_settings {
+    severity                      = 0
     end_of_customer_impact_status = "RESOLVED"
     private_incident_channel      = false
 
@@ -70,19 +71,22 @@ resource "blameless_incident_type" "incident_type_security" {
     }
   }
 
-  severity1_settings {
+  severity_settings {
+    severity               = 1
     incident_naming_scheme = "custom"
     require_dash_separator = false
     custom_channel_format  = "s1-{incident.name}"
   }
 
-  severity2_settings {
+  severity_settings {
+    severity               = 2
     incident_naming_scheme = "custom"
     require_dash_separator = false
     custom_channel_format  = "s2-{incident.name}"
   }
 
-  severity3_settings {
+  severity_settings {
+    severity               = 3
     incident_naming_scheme = "custom"
     require_dash_separator = false
     custom_channel_format  = "s3-{incident.name}"

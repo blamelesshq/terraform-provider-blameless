@@ -22,7 +22,8 @@ resource "blameless_incident_type" "incident_type_security" {
   name   = "Security"
   active = true
 
-  severity0_settings {
+  severity_settings {
+    severity                      = 0
     end_of_customer_impact_status = "RESOLVED"
     private_incident_channel      = false
 
@@ -85,19 +86,22 @@ resource "blameless_incident_type" "incident_type_security" {
     }
   }
 
-  severity1_settings {
+  severity_settings {
+    severity               = 1
     incident_naming_scheme = "custom"
     require_dash_separator = false
     custom_channel_format  = "s1-{incident.name}"
   }
 
-  severity2_settings {
+  severity_settings {
+    severity               = 2
     incident_naming_scheme = "custom"
     require_dash_separator = false
     custom_channel_format  = "s2-{incident.name}"
   }
 
-  severity3_settings {
+  severity_settings {
+    severity               = 3
     incident_naming_scheme = "custom"
     require_dash_separator = false
     custom_channel_format  = "s3-{incident.name}"
@@ -115,17 +119,18 @@ resource "blameless_incident_type" "incident_type_security" {
 
 ### Optional
 
-- `severity0_settings` (Block Set, Max: 1) Severity 0 configuration (see [below for nested schema](#nestedblock--severity0_settings))
-- `severity1_settings` (Block Set, Max: 1) Severity 1 configuration (see [below for nested schema](#nestedblock--severity1_settings))
-- `severity2_settings` (Block Set, Max: 1) Severity 2 configuration (see [below for nested schema](#nestedblock--severity2_settings))
-- `severity3_settings` (Block Set, Max: 1) Severity 3 configuration (see [below for nested schema](#nestedblock--severity3_settings))
+- `severity_settings` (Block List) Severity configuration (see [below for nested schema](#nestedblock--severity_settings))
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
 
-<a id="nestedblock--severity0_settings"></a>
-### Nested Schema for `severity0_settings`
+<a id="nestedblock--severity_settings"></a>
+### Nested Schema for `severity_settings`
+
+Required:
+
+- `severity` (Number) Severity level.
 
 Optional:
 
@@ -141,138 +146,18 @@ Optional:
 - `retrospective_incident_resolution_required` (Boolean) Requires incident resolution for the retrospective to be completed.
 - `retrospective_questionnaire_template` (String) JSON schema for the retrospective questionnaire.
 - `retrospective_required` (Boolean) Requires retrospectives.
-- `task_list` (Block Set, Max: 1) Tasks to complete at each status of an incident. (see [below for nested schema](#nestedblock--severity0_settings--task_list))
+- `task_list` (Block Set, Max: 1) Tasks to complete at each status of an incident. (see [below for nested schema](#nestedblock--severity_settings--task_list))
 - `tasks_full_permission_role` (String) Role with full permissions to tasks.
 
-<a id="nestedblock--severity0_settings--task_list"></a>
-### Nested Schema for `severity0_settings.task_list`
+<a id="nestedblock--severity_settings--task_list"></a>
+### Nested Schema for `severity_settings.task_list`
 
 Required:
 
-- `task` (Block Set, Min: 1) (see [below for nested schema](#nestedblock--severity0_settings--task_list--task))
+- `task` (Block Set, Min: 1) (see [below for nested schema](#nestedblock--severity_settings--task_list--task))
 
-<a id="nestedblock--severity0_settings--task_list--task"></a>
-### Nested Schema for `severity0_settings.task_list.task`
-
-Required:
-
-- `incident_status` (String) Status to present the task.
-- `name` (String) Name of the task.
-- `required` (Boolean) Requires task to be completed.
-- `role` (String) Role assigned to the task.
-
-
-
-
-<a id="nestedblock--severity1_settings"></a>
-### Nested Schema for `severity1_settings`
-
-Optional:
-
-- `announcement_channels` (List of String) Slack channels to notify when an incident is created.
-- `auto_recruit_team_members` (List of String) Slack team members to automatically recruit into the incident channel.
-- `custom_channel_format` (String) Custom format for incident channel names.
-- `end_of_customer_impact_status` (String) Status that marks the end of the impact of the incident to the customer.
-- `incident_naming_scheme` (String) Naming scheme for incidents.
-- `private_incident_channel` (Boolean) Enables private channels when an incident is created.
-- `require_dash_separator` (Boolean) Require a dash separator in custom incident names.
-- `retrospective_analysis_template` (String) Markdown template for the retrospective analysis.
-- `retrospective_daily_reminder` (Boolean) Enables daily reminder to complete the retrospective.
-- `retrospective_incident_resolution_required` (Boolean) Requires incident resolution for the retrospective to be completed.
-- `retrospective_questionnaire_template` (String) JSON schema for the retrospective questionnaire.
-- `retrospective_required` (Boolean) Requires retrospectives.
-- `task_list` (Block Set, Max: 1) Tasks to complete at each status of an incident. (see [below for nested schema](#nestedblock--severity1_settings--task_list))
-- `tasks_full_permission_role` (String) Role with full permissions to tasks.
-
-<a id="nestedblock--severity1_settings--task_list"></a>
-### Nested Schema for `severity1_settings.task_list`
-
-Required:
-
-- `task` (Block Set, Min: 1) (see [below for nested schema](#nestedblock--severity1_settings--task_list--task))
-
-<a id="nestedblock--severity1_settings--task_list--task"></a>
-### Nested Schema for `severity1_settings.task_list.task`
-
-Required:
-
-- `incident_status` (String) Status to present the task.
-- `name` (String) Name of the task.
-- `required` (Boolean) Requires task to be completed.
-- `role` (String) Role assigned to the task.
-
-
-
-
-<a id="nestedblock--severity2_settings"></a>
-### Nested Schema for `severity2_settings`
-
-Optional:
-
-- `announcement_channels` (List of String) Slack channels to notify when an incident is created.
-- `auto_recruit_team_members` (List of String) Slack team members to automatically recruit into the incident channel.
-- `custom_channel_format` (String) Custom format for incident channel names.
-- `end_of_customer_impact_status` (String) Status that marks the end of the impact of the incident to the customer.
-- `incident_naming_scheme` (String) Naming scheme for incidents.
-- `private_incident_channel` (Boolean) Enables private channels when an incident is created.
-- `require_dash_separator` (Boolean) Require a dash separator in custom incident names.
-- `retrospective_analysis_template` (String) Markdown template for the retrospective analysis.
-- `retrospective_daily_reminder` (Boolean) Enables daily reminder to complete the retrospective.
-- `retrospective_incident_resolution_required` (Boolean) Requires incident resolution for the retrospective to be completed.
-- `retrospective_questionnaire_template` (String) JSON schema for the retrospective questionnaire.
-- `retrospective_required` (Boolean) Requires retrospectives.
-- `task_list` (Block Set, Max: 1) Tasks to complete at each status of an incident. (see [below for nested schema](#nestedblock--severity2_settings--task_list))
-- `tasks_full_permission_role` (String) Role with full permissions to tasks.
-
-<a id="nestedblock--severity2_settings--task_list"></a>
-### Nested Schema for `severity2_settings.task_list`
-
-Required:
-
-- `task` (Block Set, Min: 1) (see [below for nested schema](#nestedblock--severity2_settings--task_list--task))
-
-<a id="nestedblock--severity2_settings--task_list--task"></a>
-### Nested Schema for `severity2_settings.task_list.task`
-
-Required:
-
-- `incident_status` (String) Status to present the task.
-- `name` (String) Name of the task.
-- `required` (Boolean) Requires task to be completed.
-- `role` (String) Role assigned to the task.
-
-
-
-
-<a id="nestedblock--severity3_settings"></a>
-### Nested Schema for `severity3_settings`
-
-Optional:
-
-- `announcement_channels` (List of String) Slack channels to notify when an incident is created.
-- `auto_recruit_team_members` (List of String) Slack team members to automatically recruit into the incident channel.
-- `custom_channel_format` (String) Custom format for incident channel names.
-- `end_of_customer_impact_status` (String) Status that marks the end of the impact of the incident to the customer.
-- `incident_naming_scheme` (String) Naming scheme for incidents.
-- `private_incident_channel` (Boolean) Enables private channels when an incident is created.
-- `require_dash_separator` (Boolean) Require a dash separator in custom incident names.
-- `retrospective_analysis_template` (String) Markdown template for the retrospective analysis.
-- `retrospective_daily_reminder` (Boolean) Enables daily reminder to complete the retrospective.
-- `retrospective_incident_resolution_required` (Boolean) Requires incident resolution for the retrospective to be completed.
-- `retrospective_questionnaire_template` (String) JSON schema for the retrospective questionnaire.
-- `retrospective_required` (Boolean) Requires retrospectives.
-- `task_list` (Block Set, Max: 1) Tasks to complete at each status of an incident. (see [below for nested schema](#nestedblock--severity3_settings--task_list))
-- `tasks_full_permission_role` (String) Role with full permissions to tasks.
-
-<a id="nestedblock--severity3_settings--task_list"></a>
-### Nested Schema for `severity3_settings.task_list`
-
-Required:
-
-- `task` (Block Set, Min: 1) (see [below for nested schema](#nestedblock--severity3_settings--task_list--task))
-
-<a id="nestedblock--severity3_settings--task_list--task"></a>
-### Nested Schema for `severity3_settings.task_list.task`
+<a id="nestedblock--severity_settings--task_list--task"></a>
+### Nested Schema for `severity_settings.task_list.task`
 
 Required:
 

@@ -1,16 +1,23 @@
 package incidenttype
 
 import (
-	"fmt"
-
 	"github.com/blamelesshq/terraform-provider/internal/model"
 )
 
-func flattenIncidentSeverity(settings *model.IncidentTypeSeverity) []interface{} {
+func flattenIncidentSeverities(settings []*model.IncidentTypeSeverity) []interface{} {
+	results := []interface{}{}
+	for _, setting := range settings {
+		results = append(results, flattenIncidentSeverity(setting))
+	}
+	return results
+}
+
+func flattenIncidentSeverity(settings *model.IncidentTypeSeverity) map[string]interface{} {
 	if settings == nil {
-		return []interface{}{}
+		return map[string]interface{}{}
 	}
 	result := map[string]interface{}{}
+	result["severity"] = settings.Severity
 	if settings.IncidentSettings != nil {
 		result["end_of_customer_impact_status"] = settings.IncidentSettings.EndOfCustomerImpactStatus
 		result["private_incident_channel"] = settings.IncidentSettings.PrivateIncidentChannel
@@ -39,8 +46,7 @@ func flattenIncidentSeverity(settings *model.IncidentTypeSeverity) []interface{}
 		result["tasks_full_permission_role"] = settings.TaskSettings.FullPermissionRole
 		result["task_list"] = flattenTaskList(settings.TaskSettings.TaskList)
 	}
-	fmt.Printf("5\n\ntask_list_result:: %+v\n\n6", result["task_list"])
-	return []interface{}{result}
+	return result
 }
 
 func flattenTaskList(settings []*model.IncidentSeverityTypeTaskList) []interface{} {
