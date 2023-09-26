@@ -46,19 +46,19 @@ resource "blameless_incident_type" "incident_type_security" {
       }
       task {
         incident_status = "IDENTIFIED"
-        name            = "Update staus page"
+        name            = "Update status page"
         role            = "Communication Lead"
         required        = true
       }
       task {
         incident_status = "MONITORING"
-        name            = "Update staus page"
+        name            = "Update status page"
         role            = "Communication Lead"
         required        = true
       }
       task {
         incident_status = "RESOLVED"
-        name            = "Update staus page"
+        name            = "Update status page"
         role            = "Communication Lead"
         required        = true
       }

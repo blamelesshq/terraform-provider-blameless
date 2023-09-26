@@ -25,9 +25,9 @@ type Service interface {
 	GetIncidentSeveritySettings(ctx context.Context) (*model.IncidentSeveritySettings, error)
 	UpdateIncidentSeveritySettings(ctx context.Context, settings *model.IncidentSeveritySettings) error
 
-	GetIncidentTypeSettings(ctx context.Context, id string) (*model.IncidentTypeSettings, error)
-	CreateIncidentTypeSettings(ctx context.Context, settings *model.IncidentTypeSettings) (string, error)
-	UpdateIncidentTypeSettings(ctx context.Context, id string, settings *model.IncidentTypeSettings) error
+	GetIncidentTypeSettings(ctx context.Context, id string) (*model.IncidentType, error)
+	CreateIncidentTypeSettings(ctx context.Context, settings *model.IncidentType) (string, error)
+	UpdateIncidentTypeSettings(ctx context.Context, id string, settings *model.IncidentType) error
 	DeleteIncidentTypeSettings(ctx context.Context, id string) error
 
 	GetIncidentTypeSeveritySettings(ctx context.Context) (*model.IncidentTypeSeverity, error)

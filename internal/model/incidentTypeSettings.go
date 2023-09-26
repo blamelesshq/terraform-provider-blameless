@@ -1,6 +1,6 @@
 package model
 
-type IncidentTypeSettings struct {
+type IncidentType struct {
 	Id         string                  `json:"id"`
 	Name       string                  `json:"name"`
 	Active     bool                    `json:"active"`
@@ -8,13 +8,13 @@ type IncidentTypeSettings struct {
 }
 
 type IncidentTypeSeverity struct {
-	Severity              *int                                       `json:"severity,omitempty"`
-	IncidentSettings      *IncidentTypeSeverityIncidentSettings      `json:"incidentSettings,omitempty"`
-	RetrospectiveSettings *IncidentTypeSeverityRetrospectiveSettings `json:"retrospectiveSettings,omitempty"`
-	TaskSettings          *IncidentTypeSeverityTaskSettings          `json:"taskSettings,omitempty"`
+	Severity              *int                               `json:"severity,omitempty"`
+	IncidentSettings      *IncidentTypeSeverityIncident      `json:"incidentSettings,omitempty"`
+	RetrospectiveSettings *IncidentTypeSeverityRetrospective `json:"retrospectiveSettings,omitempty"`
+	TaskSettings          *IncidentTypeSeverityTask          `json:"taskSettings,omitempty"`
 }
 
-type IncidentTypeSeverityIncidentSettings struct {
+type IncidentTypeSeverityIncident struct {
 	EndOfCustomerImpactStatus *string                                       `json:"endOfCustomerImpactStatus,omitempty"`
 	PrivateIncidentChannel    *bool                                         `json:"privateIncidentChannel,omitempty"`
 	ChannelNaming             *IncidentTypeSeverityIncidentChannelNaming    `json:"channelNaming,omitempty"`
@@ -32,7 +32,7 @@ type IncidentTypeSeverityIncidentTeamNotification struct {
 	AnnouncementChannels   []string `json:"announcementChannels,omitempty"`
 }
 
-type IncidentTypeSeverityRetrospectiveSettings struct {
+type IncidentTypeSeverityRetrospective struct {
 	Required                   *bool   `json:"required,omitempty"`
 	IncidentResolutionRequired *bool   `json:"incidentResolutionRequired,omitempty"`
 	DailyReminder              *bool   `json:"dailyReminder,omitempty"`
@@ -40,7 +40,7 @@ type IncidentTypeSeverityRetrospectiveSettings struct {
 	QuestionnaireTemplate      *string `json:"questionnaireTemplate,omitempty"`
 }
 
-type IncidentTypeSeverityTaskSettings struct {
+type IncidentTypeSeverityTask struct {
 	FullPermissionRole *string                         `json:"fullPermissionRole,omitempty"`
 	TaskList           []*IncidentSeverityTypeTaskList `json:"taskList,omitempty"`
 }
