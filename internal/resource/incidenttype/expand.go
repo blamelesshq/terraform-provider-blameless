@@ -6,8 +6,8 @@ import (
 	"github.com/hashicorp/go-cty/cty"
 )
 
-func expand(config cty.Value) *model.IncidentTypeSettings {
-	settings := &model.IncidentTypeSettings{
+func expand(config cty.Value) *model.IncidentType {
+	settings := &model.IncidentType{
 		Name:       *value.String(config.GetAttr("name")),
 		Active:     *value.Bool(config.GetAttr("active")),
 		Severities: expandSeverities(config.GetAttr("severity_settings")),
@@ -27,7 +27,7 @@ func expandSeverities(config cty.Value) []*model.IncidentTypeSeverity {
 func expandSeverity(config cty.Value) *model.IncidentTypeSeverity {
 	return &model.IncidentTypeSeverity{
 		Severity: value.Int(config.GetAttr("severity")),
-		IncidentSettings: &model.IncidentTypeSeverityIncidentSettings{
+		IncidentSettings: &model.IncidentTypeSeverityIncident{
 			EndOfCustomerImpactStatus: value.String(config.GetAttr("end_of_customer_impact_status")),
 			PrivateIncidentChannel:    value.Bool(config.GetAttr("private_incident_channel")),
 			ChannelNaming: &model.IncidentTypeSeverityIncidentChannelNaming{
@@ -43,14 +43,14 @@ func expandSeverity(config cty.Value) *model.IncidentTypeSeverity {
 				TeamsAnnouncementChannels: value.StringArray(config.GetAttr("teams_announcement_channels")),
 			},
 		},
-		RetrospectiveSettings: &model.IncidentTypeSeverityRetrospectiveSettings{
+		RetrospectiveSettings: &model.IncidentTypeSeverityRetrospective{
 			AnalysisTemplate:           value.String(config.GetAttr("retrospective_analysis_template")),
 			QuestionnaireTemplate:      value.String(config.GetAttr("retrospective_questionnaire_template")),
 			Required:                   value.Bool(config.GetAttr("retrospective_required")),
 			DailyReminder:              value.Bool(config.GetAttr("retrospective_daily_reminder")),
 			IncidentResolutionRequired: value.Bool(config.GetAttr("retrospective_incident_resolution_required")),
 		},
-		TaskSettings: &model.IncidentTypeSeverityTaskSettings{
+		TaskSettings: &model.IncidentTypeSeverityTask{
 			FullPermissionRole: value.String(config.GetAttr("tasks_full_permission_role")),
 			TaskList:           expandTaskList(config.GetAttr("task_list")),
 		},
