@@ -29,8 +29,11 @@ func flattenIncidentSeverity(settings *model.IncidentTypeSeverity) map[string]in
 		}
 
 		if settings.IncidentSettings.TeamNotifications != nil {
-			result["auto_recruit_team_members"] = settings.IncidentSettings.TeamNotifications.AutoRecruitTeamMembers
-			result["announcement_channels"] = settings.IncidentSettings.TeamNotifications.AnnouncementChannels
+			result["slack_invited_users"] = settings.IncidentSettings.TeamNotifications.SlackInvitedUsers
+			result["slack_announcement_channels"] = settings.IncidentSettings.TeamNotifications.SlackAnnouncementChannels
+			result["teams_invited_users"] = settings.IncidentSettings.TeamNotifications.TeamsInvitedUsers
+			result["teams_announcement_groups"] = settings.IncidentSettings.TeamNotifications.TeamsAnnouncementGroups
+			result["teams_announcement_channels"] = settings.IncidentSettings.TeamNotifications.TeamsAnnouncementChannels
 		}
 	}
 

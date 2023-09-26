@@ -31,10 +31,22 @@ resource "blameless_incident_type" "incident_type_security" {
     require_dash_separator = false
     custom_channel_format  = "s0-{incident.name}"
 
-    auto_recruit_team_members = [
+    # Slack Notifications
+    slack_invited_users = [
       "@dillon"
     ]
-    announcement_channels = [
+    slack_announcement_channels = [
+      "#general"
+    ]
+
+    # MS Teams Notifications
+    teams_invited_users = [
+      "@dillon"
+    ]
+    teams_announcement_groups = [
+      "@responders"
+    ]
+    teams_announcement_channels = [
       "#general"
     ]
 
@@ -134,8 +146,6 @@ Required:
 
 Optional:
 
-- `announcement_channels` (List of String) Slack channels to notify when an incident is created.
-- `auto_recruit_team_members` (List of String) Slack team members to automatically recruit into the incident channel.
 - `custom_channel_format` (String) Custom format for incident channel names.
 - `end_of_customer_impact_status` (String) Status that marks the end of the impact of the incident to the customer.
 - `incident_naming_scheme` (String) Naming scheme for incidents.
@@ -146,8 +156,13 @@ Optional:
 - `retrospective_incident_resolution_required` (Boolean) Requires incident resolution for the retrospective to be completed.
 - `retrospective_questionnaire_template` (String) JSON schema for the retrospective questionnaire.
 - `retrospective_required` (Boolean) Requires retrospectives.
+- `slack_announcement_channels` (List of String) Slack channels to notify when an incident is created.
+- `slack_invited_users` (List of String) Slack team members to automatically recruit into the incident channel.
 - `task_list` (Block Set, Max: 1) Tasks to complete at each status of an incident. (see [below for nested schema](#nestedblock--severity_settings--task_list))
 - `tasks_full_permission_role` (String) Role with full permissions to tasks.
+- `teams_announcement_channels` (List of String) MS Teams channels to notify when an incident is created.
+- `teams_announcement_groups` (List of String) MS Teams groups to notify when an incident is created.
+- `teams_invited_users` (List of String) MS Teams team members to automatically recruit into the incident channel.
 
 <a id="nestedblock--severity_settings--task_list"></a>
 ### Nested Schema for `severity_settings.task_list`

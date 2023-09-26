@@ -28,8 +28,11 @@ type IncidentTypeSeverityIncidentChannelNaming struct {
 }
 
 type IncidentTypeSeverityIncidentTeamNotification struct {
-	AutoRecruitTeamMembers []string `json:"autoRecruitTeamMembers,omitempty"`
-	AnnouncementChannels   []string `json:"announcementChannels,omitempty"`
+	SlackInvitedUsers         []string `json:"slackInvitedUsers,omitempty"`
+	SlackAnnouncementChannels []string `json:"slackAnnouncementChannels,omitempty"`
+	TeamsInvitedUsers         []string `json:"teamsInvitedUsers,omitempty"`
+	TeamsAnnouncementGroups   []string `json:"teamsAnnouncementGroups,omitempty"`
+	TeamsAnnouncementChannels []string `json:"teamsAnnouncementChannels,omitempty"`
 }
 
 type IncidentTypeSeverityRetrospectiveSettings struct {
