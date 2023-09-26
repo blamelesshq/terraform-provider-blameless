@@ -1,0 +1,170 @@
+{
+  "jsonSchema": {
+    "type": "object",
+    "properties": {
+      "impacted": {
+        "type": "array",
+        "title": "Who was impacted by this incident?",
+        "items": {
+          "type": "string",
+          "enum": ["Customers", "Partners", "Internal Stakeholders"]
+        },
+        "uniqueItems": true
+      },
+      "detected": {
+        "title": "How was the incident detected?",
+        "type": "string",
+        "enum": ["alerts_monitoring", "customer_reported", "other"],
+        "enumNames": [
+          "Alerts/Monitoring",
+          "Customer Reported",
+          "Other (please explain)"
+        ],
+        "default": "alerts_monitoring"
+      },
+      "detected_explanation": {
+        "title": "Other, please explain",
+        "type": "string"
+      },
+      "cause": {
+        "title": "Did a recent change cause this incident?",
+        "type": "string",
+        "enum": ["yes", "no"],
+        "enumNames": ["Yes", "No"],
+        "default": "yes"
+      },
+      "causal_factors": {
+        "title": "Was one or more of the causal factors already a known issue?",
+        "type": "string",
+        "enum": ["yes", "no"],
+        "enumNames": ["Yes", "No"],
+        "default": "no"
+      },
+      "causal_factors_explanation": {
+        "title": "If yes, please explain",
+        "type": "string"
+      },
+      "attributed": {
+        "title": "Was this incident attributed to the correct team?",
+        "type": "string",
+        "enum": ["yes", "no"],
+        "enumNames": ["Yes", "No"],
+        "default": "yes"
+      },
+      "attributed_explanation": {
+        "title": "If no, then why not?",
+        "type": "string"
+      },
+      "feedback": {
+        "type": "string",
+        "title": "Any other thoughts/feedback?"
+      }
+    },
+    "dependencies": {
+      "detected": {
+        "oneOf": [
+          {
+            "properties": {
+              "detected": {
+                "type": "string",
+                "enum": ["other"]
+              }
+            },
+            "required": ["detected_explanation"]
+          },
+          {
+            "properties": {
+              "detected": {
+                "type": "string",
+                "enum": ["alerts_monitoring", "customer_reported"]
+              },
+              "detected_explanation": {
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "causal_factors": {
+        "oneOf": [
+          {
+            "properties": {
+              "causal_factors": {
+                "type": "string",
+                "enum": ["yes"]
+              }
+            },
+            "required": ["causal_factors_explanation"]
+          },
+          {
+            "properties": {
+              "causal_factors": {
+                "type": "string",
+                "enum": ["no"]
+              },
+              "causal_factors_explanation": {
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      },
+      "attributed": {
+        "oneOf": [
+          {
+            "properties": {
+              "attributed": {
+                "type": "string",
+                "enum": ["no"]
+              }
+            },
+            "required": ["attributed_explanation"]
+          },
+          {
+            "properties": {
+              "attributed": {
+                "type": "string",
+                "enum": ["yes"]
+              },
+              "attributed_explanation": {
+                "readOnly": true
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "uiSchema": {
+    "impacted": {
+      "ui:widget": "checkboxes"
+    },
+    "detected": {
+      "ui:widget": "radio"
+    },
+    "detected_explanation": {
+      "ui:widget": "textarea"
+    },
+    "other": {
+      "ui:widget": "textarea"
+    },
+    "cause": {
+      "ui:widget": "radio"
+    },
+    "causal_factors": {
+      "ui:widget": "radio"
+    },
+    "causal_factors_explanation": {
+      "ui:widget": "textarea"
+    },
+    "attributed": {
+      "ui:widget": "radio"
+    },
+    "attributed_explanation": {
+      "ui:widget": "textarea"
+    },
+    "feedback": {
+      "ui:widget": "textarea"
+    }
+  }
+}

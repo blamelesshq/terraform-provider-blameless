@@ -2,9 +2,9 @@ package config
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/blamelesshq/terraform-provider/internal/service"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
@@ -38,8 +38,7 @@ func ConfigureProvider(terraformVersion *string) schema.ConfigureContextFunc {
 		key := keyVal.(string)
 		instance := instanceVal.(string)
 
-		fmt.Printf("configured instance: %s\n", instance)
-		fmt.Printf("configured key: %s\n", key)
+		tflog.Debug(ctx, "configured", map[string]interface{}{"instance": instance, "key": key})
 
 		client := service.New(key, instance)
 

@@ -24,8 +24,3 @@ resource "blameless_incident_severities" "sev_settings" {
     sev3_label = "SEV3"
   }
 }
-
-resource "blameless_incident_type" "incident_type_security" {
-  name   = "Security"
-  active = true
-}

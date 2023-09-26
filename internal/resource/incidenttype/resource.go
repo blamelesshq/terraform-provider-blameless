@@ -36,6 +36,13 @@ func NewResource() *schema.Resource {
 				Required:    true,
 				Description: "Active/Inactive",
 			},
+			"severity_settings": {
+				Type:        schema.TypeList,
+				Required:    false,
+				Optional:    true,
+				Description: "Severity configuration",
+				Elem:        getIncidentSeverityResource(),
+			},
 		},
 	}
 }
@@ -64,6 +71,7 @@ func read(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 	result := multierror.Append(
 		d.Set("name", settings.Name),
 		d.Set("active", settings.Active),
+		d.Set("severity_settings", flattenIncidentSeverities(settings.Severities)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

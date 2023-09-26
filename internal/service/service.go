@@ -25,10 +25,13 @@ type Service interface {
 	GetIncidentSeveritySettings(ctx context.Context) (*model.IncidentSeveritySettings, error)
 	UpdateIncidentSeveritySettings(ctx context.Context, settings *model.IncidentSeveritySettings) error
 
-	GetIncidentTypeSettings(ctx context.Context, id string) (*model.IncidentTypeSettings, error)
-	CreateIncidentTypeSettings(ctx context.Context, settings *model.IncidentTypeSettings) (string, error)
-	UpdateIncidentTypeSettings(ctx context.Context, id string, settings *model.IncidentTypeSettings) error
+	GetIncidentTypeSettings(ctx context.Context, id string) (*model.IncidentType, error)
+	CreateIncidentTypeSettings(ctx context.Context, settings *model.IncidentType) (string, error)
+	UpdateIncidentTypeSettings(ctx context.Context, id string, settings *model.IncidentType) error
 	DeleteIncidentTypeSettings(ctx context.Context, id string) error
+
+	GetIncidentTypeSeveritySettings(ctx context.Context) (*model.IncidentTypeSeverity, error)
+	UpdateIncidentTypeSeveritySettings(ctx context.Context, settings *model.IncidentTypeSeverity) error
 }
 
 type Svc struct {
@@ -89,6 +92,7 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 			return nil, err
 		}
 		payload = bytes.NewReader(r)
+		tflog.Debug(ctx, "request", map[string]interface{}{"payload": string(r)})
 	}
 
 	request, err := retryablehttp.NewRequest(method, target, payload)
@@ -133,6 +137,7 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 			tflog.Debug(ctx, fmt.Sprintf("json unmarshal error: %+v", err), map[string]interface{}{"response body": string(body)})
 			return nil, fmt.Errorf("internal service error. code: 5")
 		}
+		tflog.Debug(ctx, "response", map[string]interface{}{"body": string(body), "unmarshaled": response})
 		return &response, nil
 	}
 
