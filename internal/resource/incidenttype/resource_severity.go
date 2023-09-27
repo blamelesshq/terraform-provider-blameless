@@ -48,7 +48,7 @@ func getIncidentSeverityResource() *schema.Resource {
 				ValidateFunc: validation.StringIsNotEmpty,
 				Description:  "Custom format for incident channel names.",
 			},
-			"auto_recruit_team_members": {
+			"slack_invited_users": {
 				Type:        schema.TypeList,
 				Required:    false,
 				Optional:    true,
@@ -58,11 +58,41 @@ func getIncidentSeverityResource() *schema.Resource {
 					ValidateFunc: validation.StringIsNotEmpty,
 				},
 			},
-			"announcement_channels": {
+			"slack_announcement_channels": {
 				Type:        schema.TypeList,
 				Required:    false,
 				Optional:    true,
 				Description: "Slack channels to notify when an incident is created.",
+				Elem: &schema.Schema{
+					Type:         schema.TypeString,
+					ValidateFunc: validation.StringIsNotEmpty,
+				},
+			},
+			"teams_invited_users": {
+				Type:        schema.TypeList,
+				Required:    false,
+				Optional:    true,
+				Description: "MS Teams team members to automatically recruit into the incident channel.",
+				Elem: &schema.Schema{
+					Type:         schema.TypeString,
+					ValidateFunc: validation.StringIsNotEmpty,
+				},
+			},
+			"teams_announcement_groups": {
+				Type:        schema.TypeList,
+				Required:    false,
+				Optional:    true,
+				Description: "MS Teams groups to notify when an incident is created.",
+				Elem: &schema.Schema{
+					Type:         schema.TypeString,
+					ValidateFunc: validation.StringIsNotEmpty,
+				},
+			},
+			"teams_announcement_channels": {
+				Type:        schema.TypeList,
+				Required:    false,
+				Optional:    true,
+				Description: "MS Teams channels to notify when an incident is created.",
 				Elem: &schema.Schema{
 					Type:         schema.TypeString,
 					ValidateFunc: validation.StringIsNotEmpty,

@@ -16,10 +16,22 @@ resource "blameless_incident_type" "incident_type_security" {
     require_dash_separator = false
     custom_channel_format  = "s0-{incident.name}"
 
-    auto_recruit_team_members = [
+    # Slack Notifications
+    slack_invited_users = [
       "@dillon"
     ]
-    announcement_channels = [
+    slack_announcement_channels = [
+      "#general"
+    ]
+
+    # MS Teams Notifications
+    teams_invited_users = [
+      "@dillon"
+    ]
+    teams_announcement_groups = [
+      "@responders"
+    ]
+    teams_announcement_channels = [
       "#general"
     ]
 

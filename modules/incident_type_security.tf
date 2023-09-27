@@ -16,12 +16,21 @@ resource "blameless_incident_type" "incident_type_security" {
     require_dash_separator = false
     custom_channel_format  = "s0-{incident.name}"
 
-    auto_recruit_team_members = [
+    slack_invited_users = [
       "@dillon"
     ]
-    announcement_channels = [
+    slack_announcement_channels = [
       "#general"
     ]
+    # teams_invited_users = [
+    #   "@dillon-teams"
+    # ]
+    # teams_announcement_groups = [
+    #   "@responders-teams"
+    # ]
+    # teams_announcement_channels = [
+    #   "#general-teams"
+    # ]
 
     retrospective_analysis_template            = local.analysis_template
     retrospective_questionnaire_template       = local.questionnaire_template

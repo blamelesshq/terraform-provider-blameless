@@ -36,8 +36,11 @@ func expandSeverity(config cty.Value) *model.IncidentTypeSeverity {
 				CustomChannelFormat:  value.String(config.GetAttr("custom_channel_format")),
 			},
 			TeamNotifications: &model.IncidentTypeSeverityIncidentTeamNotification{
-				AutoRecruitTeamMembers: value.StringArray(config.GetAttr("auto_recruit_team_members")),
-				AnnouncementChannels:   value.StringArray(config.GetAttr("announcement_channels")),
+				SlackInvitedUsers:         value.StringArray(config.GetAttr("slack_invited_users")),
+				SlackAnnouncementChannels: value.StringArray(config.GetAttr("slack_announcement_channels")),
+				TeamsInvitedUsers:         value.StringArray(config.GetAttr("teams_invited_users")),
+				TeamsAnnouncementGroups:   value.StringArray(config.GetAttr("teams_announcement_groups")),
+				TeamsAnnouncementChannels: value.StringArray(config.GetAttr("teams_announcement_channels")),
 			},
 		},
 		RetrospectiveSettings: &model.IncidentTypeSeverityRetrospective{
