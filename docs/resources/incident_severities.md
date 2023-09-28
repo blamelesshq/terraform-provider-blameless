@@ -14,11 +14,21 @@ Incident Severities
 
 ```terraform
 resource "blameless_incident_severities" "sev_settings" {
-  severities {
-    sev0_label = "{{severity 0 label}}"
-    sev1_label = "{{severity 1 label}}"
-    sev2_label = "{{severity 2 label}}"
-    sev3_label = "{{severity 3 label}}"
+  severity {
+    level = 0
+    label = "SEV0"
+  }
+  severity {
+    level = 1
+    label = "SEV1"
+  }
+  severity {
+    level = 2
+    label = "SEV2"
+  }
+  severity {
+    level = 3
+    label = "SEV3"
   }
 }
 ```
@@ -28,18 +38,16 @@ resource "blameless_incident_severities" "sev_settings" {
 
 ### Required
 
-- `severities` (Block Set, Min: 1, Max: 1) (see [below for nested schema](#nestedblock--severities))
+- `severity` (Block List, Min: 1) (see [below for nested schema](#nestedblock--severity))
 
 ### Read-Only
 
 - `id` (String) The ID of this resource.
 
-<a id="nestedblock--severities"></a>
-### Nested Schema for `severities`
+<a id="nestedblock--severity"></a>
+### Nested Schema for `severity`
 
 Required:
 
-- `sev0_label` (String) Label for Severity 0.
-- `sev1_label` (String) Label for Severity 1.
-- `sev2_label` (String) Label for Severity 2.
-- `sev3_label` (String) Label for Severity 3.
+- `label` (String) Label for Severity.
+- `level` (Number) Level of Severity.

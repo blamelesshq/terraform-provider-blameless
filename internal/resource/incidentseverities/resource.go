@@ -27,35 +27,23 @@ func NewResource() *schema.Resource {
 		},
 		Description: "Incident Severities",
 		Schema: map[string]*schema.Schema{
-			"severities": {
-				Type:     schema.TypeSet,
-				MaxItems: 1,
+			"severity": {
+				Type:     schema.TypeList,
+				MinItems: 1,
 				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-						"sev0_label": {
-							Type:         schema.TypeString,
+						"level": {
+							Type:         schema.TypeInt,
 							Required:     true,
-							ValidateFunc: validation.StringIsNotEmpty,
-							Description:  "Label for Severity 0.",
+							ValidateFunc: validation.IntAtLeast(0),
+							Description:  "Level of Severity.",
 						},
-						"sev1_label": {
+						"label": {
 							Type:         schema.TypeString,
 							Required:     true,
 							ValidateFunc: validation.StringIsNotEmpty,
-							Description:  "Label for Severity 1.",
-						},
-						"sev2_label": {
-							Type:         schema.TypeString,
-							Required:     true,
-							ValidateFunc: validation.StringIsNotEmpty,
-							Description:  "Label for Severity 2.",
-						},
-						"sev3_label": {
-							Type:         schema.TypeString,
-							Required:     true,
-							ValidateFunc: validation.StringIsNotEmpty,
-							Description:  "Label for Severity 3.",
+							Description:  "Label for Severity.",
 						},
 					},
 				},
@@ -85,7 +73,7 @@ func read(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagn
 	}
 
 	result := multierror.Append(
-		d.Set("severities", flattenIncidentSeverities(settings)),
+		d.Set("severity", flattenIncidentSeverities(settings)),
 	)
 
 	return diag.FromErr(result.ErrorOrNil())

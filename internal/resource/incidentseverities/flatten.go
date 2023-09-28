@@ -1,15 +1,16 @@
 package incidentseverities
 
 import (
-	"fmt"
-
 	"github.com/blamelesshq/terraform-provider/internal/model"
 )
 
 func flattenIncidentSeverities(severities *model.IncidentSeveritySettings) []interface{} {
-	result := make(map[string]string)
+	result := []interface{}{}
 	for _, severity := range severities.Severities {
-		result[fmt.Sprintf("sev%d_label", severity.Level)] = severity.Label
+		result = append(result, map[string]interface{}{
+			"level": severity.Level,
+			"label": severity.Label,
+		})
 	}
-	return []interface{}{result}
+	return result
 }
