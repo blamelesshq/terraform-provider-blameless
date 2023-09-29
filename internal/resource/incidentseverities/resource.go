@@ -93,7 +93,7 @@ func update(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 func delete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.UpdateIncidentSeveritySettings(ctx, &model.IncidentSeveritySettings{}); err != nil {
+	if err := api.UpdateIncidentSeveritySettings(ctx, &model.IncidentSeveritySettings{Severities: []*model.IncidentSeverity{}}); err != nil {
 		return diag.FromErr(err)
 	}
 

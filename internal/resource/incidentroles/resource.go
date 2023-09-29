@@ -75,7 +75,7 @@ func update(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Dia
 func delete(ctx context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	api := m.(*config.Config).GetAPI()
 
-	if err := api.UpdateIncidentRoleSettings(ctx, &model.IncidentRoleSettings{}); err != nil {
+	if err := api.UpdateIncidentRoleSettings(ctx, &model.IncidentRoleSettings{Roles: []string{}}); err != nil {
 		return diag.FromErr(err)
 	}
 

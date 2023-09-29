@@ -114,6 +114,10 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 		return nil, fmt.Errorf("internal service error. code: 3")
 	}
 
+	if resp.StatusCode == http.StatusUnauthorized || resp.StatusCode == http.StatusForbidden {
+		return nil, fmt.Errorf("invalid blameless key")
+	}
+
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
