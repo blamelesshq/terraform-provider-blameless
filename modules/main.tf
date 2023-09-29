@@ -3,18 +3,18 @@ provider "blameless" {
   key      = var.blameless_key
 }
 
-# resource "blameless_organization" "org_settings" {
-#   name     = "local"
-#   timezone = "US/Pacific"
-# }
+resource "blameless_organization" "org_settings" {
+  name     = "local"
+  timezone = "US/Pacific"
+}
 
-# resource "blameless_incident_roles" "role_settings" {
-#   roles = [
-#     "Commander",
-#     "Communication lead",
-#     "Observer",
-#   ]
-# }
+resource "blameless_incident_roles" "role_settings" {
+  roles = [
+    "Commander",
+    "Communication lead",
+    "Observer"
+  ]
+}
 
 resource "blameless_incident_severities" "sev_settings" {
   severity {
