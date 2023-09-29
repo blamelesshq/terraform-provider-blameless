@@ -125,13 +125,19 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 		return nil, fmt.Errorf("internal service error. code: 4")
 	}
 
-	if resp.StatusCode == http.StatusUnprocessableEntity {
+	if resp.StatusCode == http.StatusUnprocessableEntity || resp.StatusCode == http.StatusConflict {
 		errResp := errorResponse{}
 		err = json.Unmarshal(body, &errResp)
 		if err != nil {
 			tflog.Debug(ctx, fmt.Sprintf("error json unmarshal error: %+v", err), map[string]interface{}{"response body": string(body)})
 		}
 		return nil, fmt.Errorf("%s", errResp.Message)
+	}
+
+	if resp.StatusCode >= http.StatusBadRequest {
+		err = fmt.Errorf("unexpected service error")
+		tflog.Debug(ctx, err.Error(), map[string]interface{}{"status code": resp.StatusCode, "response body": string(body)})
+		return nil, err
 	}
 
 	if len(body) > 0 {
