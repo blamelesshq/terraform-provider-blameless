@@ -34,5 +34,5 @@ jobs:
       gpg-private-key-passphrase: "${{ secrets.PASSPHRASE }}"
     with:
       release-notes: true
-      setup-go-version-file: ".go-version"
+      setup-go-version-file: "go.mod"
       git-ref: "${{ github.ref }}"
