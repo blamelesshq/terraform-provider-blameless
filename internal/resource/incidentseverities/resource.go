@@ -42,7 +42,7 @@ func NewResource() *schema.Resource {
 						"label": {
 							Type:         schema.TypeString,
 							Required:     true,
-							ValidateFunc: validation.StringIsNotEmpty,
+							ValidateFunc: validation.StringIsNotWhiteSpace,
 							Description:  "Label for Severity.",
 						},
 					},
