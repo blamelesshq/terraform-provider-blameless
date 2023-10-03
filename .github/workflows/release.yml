@@ -35,4 +35,4 @@ jobs:
     with:
       release-notes: true
       setup-go-version-file: ".go-version"
-      product-version: "${{ github.ref_name }}"
+      git-ref: "${{ github.ref }}"
