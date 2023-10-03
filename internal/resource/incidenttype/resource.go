@@ -28,7 +28,7 @@ func NewResource() *schema.Resource {
 			"name": {
 				Type:         schema.TypeString,
 				Required:     true,
-				ValidateFunc: validation.StringIsNotEmpty,
+				ValidateFunc: validation.StringIsNotWhiteSpace,
 				Description:  "Name of incident type.",
 			},
 			"active": {

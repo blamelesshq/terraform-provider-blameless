@@ -19,7 +19,7 @@ func getIncidentSeverityResource() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     false,
 				Optional:     true,
-				ValidateFunc: validation.StringIsNotEmpty,
+				ValidateFunc: validation.StringIsNotWhiteSpace,
 				Description:  "Status that marks the end of the impact of the incident to the customer.",
 			},
 			"private_incident_channel": {
@@ -32,7 +32,7 @@ func getIncidentSeverityResource() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     false,
 				Optional:     true,
-				ValidateFunc: validation.StringIsNotEmpty,
+				ValidateFunc: validation.StringIsNotWhiteSpace,
 				Description:  "Naming scheme for incidents.",
 			},
 			"require_dash_separator": {
@@ -45,7 +45,7 @@ func getIncidentSeverityResource() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     false,
 				Optional:     true,
-				ValidateFunc: validation.StringIsNotEmpty,
+				ValidateFunc: validation.StringIsNotWhiteSpace,
 				Description:  "Custom format for incident channel names.",
 			},
 			"slack_invited_users": {
@@ -55,7 +55,7 @@ func getIncidentSeverityResource() *schema.Resource {
 				Description: "Slack team members to automatically recruit into the incident channel.",
 				Elem: &schema.Schema{
 					Type:         schema.TypeString,
-					ValidateFunc: validation.StringIsNotEmpty,
+					ValidateFunc: validation.StringIsNotWhiteSpace,
 				},
 			},
 			"slack_announcement_channels": {
@@ -65,7 +65,7 @@ func getIncidentSeverityResource() *schema.Resource {
 				Description: "Slack channels to notify when an incident is created.",
 				Elem: &schema.Schema{
 					Type:         schema.TypeString,
-					ValidateFunc: validation.StringIsNotEmpty,
+					ValidateFunc: validation.StringIsNotWhiteSpace,
 				},
 			},
 			"teams_invited_users": {
@@ -75,7 +75,7 @@ func getIncidentSeverityResource() *schema.Resource {
 				Description: "MS Teams team members to automatically recruit into the incident channel.",
 				Elem: &schema.Schema{
 					Type:         schema.TypeString,
-					ValidateFunc: validation.StringIsNotEmpty,
+					ValidateFunc: validation.StringIsNotWhiteSpace,
 				},
 			},
 			"teams_announcement_groups": {
@@ -85,7 +85,7 @@ func getIncidentSeverityResource() *schema.Resource {
 				Description: "MS Teams groups to notify when an incident is created.",
 				Elem: &schema.Schema{
 					Type:         schema.TypeString,
-					ValidateFunc: validation.StringIsNotEmpty,
+					ValidateFunc: validation.StringIsNotWhiteSpace,
 				},
 			},
 			"teams_announcement_channels": {
@@ -95,21 +95,21 @@ func getIncidentSeverityResource() *schema.Resource {
 				Description: "MS Teams channels to notify when an incident is created.",
 				Elem: &schema.Schema{
 					Type:         schema.TypeString,
-					ValidateFunc: validation.StringIsNotEmpty,
+					ValidateFunc: validation.StringIsNotWhiteSpace,
 				},
 			},
 			"retrospective_analysis_template": {
 				Type:         schema.TypeString,
 				Required:     false,
 				Optional:     true,
-				ValidateFunc: validation.StringIsNotEmpty,
+				ValidateFunc: validation.StringIsNotWhiteSpace,
 				Description:  "Markdown template for the retrospective analysis.",
 			},
 			"retrospective_questionnaire_template": {
 				Type:         schema.TypeString,
 				Required:     false,
 				Optional:     true,
-				ValidateFunc: validation.StringIsNotEmpty,
+				ValidateFunc: validation.StringIsNotWhiteSpace,
 				Description:  "JSON schema for the retrospective questionnaire.",
 			},
 			"retrospective_required": {
@@ -134,7 +134,7 @@ func getIncidentSeverityResource() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     false,
 				Optional:     true,
-				ValidateFunc: validation.StringIsNotEmpty,
+				ValidateFunc: validation.StringIsNotWhiteSpace,
 				Description:  "Role with full permissions to tasks.",
 			},
 			"task_list": {
@@ -163,14 +163,14 @@ func getTaskResourceSchema() *schema.Resource {
 							Type:         schema.TypeString,
 							Required:     true,
 							Optional:     false,
-							ValidateFunc: validation.StringIsNotEmpty,
+							ValidateFunc: validation.StringIsNotWhiteSpace,
 							Description:  "Status to present the task.",
 						},
 						"name": {
 							Type:         schema.TypeString,
 							Required:     true,
 							Optional:     false,
-							ValidateFunc: validation.StringIsNotEmpty,
+							ValidateFunc: validation.StringIsNotWhiteSpace,
 							Description:  "Name of the task.",
 						},
 						"role": {
