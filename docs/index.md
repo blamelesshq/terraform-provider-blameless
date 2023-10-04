@@ -6,9 +6,7 @@ description: |-
 
 # Blameless Provider
 
-The Blameless provider is used to interact with the Blameless API inorder to configure a Blameless tenant.
-
-It provides resources that allow you to create and manage settings as part of a Terraform deployment.
+Use the Blameless provider to create and configure resources supported by Blameless. You must configure the provider with the proper credentials before you can use it.
 
 Use the navigation to the left to read about the available resources.
 
@@ -34,10 +32,7 @@ provider "blameless" {
 You can provide your credentials via the `BLAMELESS_INSTANCE` and `BLAMELESS_KEY` environment variables.
 
 ```terraform
-provider "blameless" {
-  instance = "{{blameless instance url}}"
-  key      = "{{blameless api key}}"
-}
+provider "blameless" {}
 ```
 
 ### Example Usage
