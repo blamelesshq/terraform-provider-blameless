@@ -4,6 +4,8 @@
 
 This provider allow use Terraform to handle Blameless resources.
 
+- [Documentation](https://registry.terraform.io/providers/blamelesshq/blameless/latest/docs)
+
 ## Getting Started
 
 ### Requirements
