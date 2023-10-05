@@ -103,7 +103,7 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 	token, err := svc.authToken()
 	if err != nil {
 		tflog.Debug(ctx, fmt.Sprintf("auth token error: %+v", err))
-		return nil, fmt.Errorf("internal service error. code: 2")
+		return nil, fmt.Errorf("unable to authenticate with blameless_key")
 	}
 	request.Header.Add("Authorization", fmt.Sprintf("Bearer %s", *token))
 	request.Header.Add("User-Agent", userAgent())
@@ -111,18 +111,30 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 	resp, err := svc.Client().Do(request)
 	if err != nil {
 		tflog.Debug(ctx, fmt.Sprintf("do request error: %+v", err), map[string]interface{}{"method": method, "target": target, "payload": fmt.Sprint(r)})
-		return nil, fmt.Errorf("internal service error. code: 3")
+		return nil, fmt.Errorf("internal service error. code: 2")
+	}
+
+	if resp.StatusCode >= http.StatusBadRequest {
+		tflog.Debug(ctx, fmt.Sprintf("response error: %+v", err), map[string]interface{}{
+			"method":     method,
+			"target":     target,
+			"statusCode": resp.StatusCode,
+		})
 	}
 
 	if resp.StatusCode == http.StatusUnauthorized || resp.StatusCode == http.StatusForbidden {
 		return nil, fmt.Errorf("invalid blameless key")
 	}
 
+	if resp.StatusCode == http.StatusNotFound {
+		return nil, fmt.Errorf("entity not found")
+	}
+
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		tflog.Debug(ctx, fmt.Sprintf("read body error: %+v", err), map[string]interface{}{"method": method, "target": target, "payload": fmt.Sprint(r)})
-		return nil, fmt.Errorf("internal service error. code: 4")
+		return nil, fmt.Errorf("internal service error. code: 3")
 	}
 
 	if resp.StatusCode == http.StatusUnprocessableEntity || resp.StatusCode == http.StatusConflict {
@@ -145,7 +157,7 @@ func callSettings[TRequest interface{}, TResponse interface{}](ctx context.Conte
 		err = json.Unmarshal(body, &response)
 		if err != nil {
 			tflog.Debug(ctx, fmt.Sprintf("json unmarshal error: %+v", err), map[string]interface{}{"response body": string(body)})
-			return nil, fmt.Errorf("internal service error. code: 5")
+			return nil, fmt.Errorf("internal service error. code: 4")
 		}
 		tflog.Debug(ctx, "response", map[string]interface{}{"body": string(body), "unmarshaled": response})
 		return &response, nil

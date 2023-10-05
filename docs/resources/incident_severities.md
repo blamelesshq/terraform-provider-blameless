@@ -51,3 +51,14 @@ Required:
 
 - `label` (String) Label for Severity.
 - `level` (Number) Level of Severity.
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+# This resource can be imported by specifying your company name.
+#
+# Example:
+terraform import blameless_incident_severities.sev_settings {{company name}}
+```
