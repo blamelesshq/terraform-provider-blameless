@@ -42,3 +42,11 @@ resource "blameless_organization" "org_settings" {
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+terraform import aws_cloudwatch_metric_alarm.test alarm-12345
+```
