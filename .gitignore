@@ -24,4 +24,4 @@ terraform-provider-blameless
 *.tfstate*
 .terraform
 .terraform.lock.hcl
-*.tfvars
+*.tfvars.infracost/
