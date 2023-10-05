@@ -1,0 +1,1 @@
+terraform import aws_cloudwatch_metric_alarm.test alarm-12345
