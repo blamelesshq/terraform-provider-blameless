@@ -42,3 +42,14 @@ resource "blameless_organization" "org_settings" {
 ### Read-Only
 
 - `id` (String) The ID of this resource.
+
+## Import
+
+Import is supported using the following syntax:
+
+```shell
+# This resource can be imported by specifying your company name.
+#
+# Example:
+terraform import blameless_organization.org_settings {{company name}}
+```
