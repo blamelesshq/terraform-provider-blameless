@@ -1,7 +1,5 @@
 # Blameless Terraform Provider
 
-:warning: The API supporting this provider is not released yet :warning:
-
 This provider allow use Terraform to handle Blameless resources.
 
 - [Documentation](https://registry.terraform.io/providers/blamelesshq/blameless/latest/docs)
