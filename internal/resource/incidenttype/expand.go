@@ -39,7 +39,7 @@ func expandSeverity(config cty.Value) *model.IncidentTypeSeverity {
 				SlackInvitedUsers:         value.StringArray(config.GetAttr("slack_invited_users")),
 				SlackAnnouncementChannels: value.StringArray(config.GetAttr("slack_announcement_channels")),
 				TeamsInvitedUsers:         value.StringArray(config.GetAttr("teams_invited_users")),
-				TeamsAnnouncementGroups:   value.StringArray(config.GetAttr("teams_announcement_groups")),
+				TeamsAnnouncementGroup:    value.String(config.GetAttr("teams_announcement_group")),
 				TeamsAnnouncementChannels: value.StringArray(config.GetAttr("teams_announcement_channels")),
 			},
 		},

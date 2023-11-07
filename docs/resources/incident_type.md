@@ -43,9 +43,7 @@ resource "blameless_incident_type" "incident_type_security" {
     teams_invited_users = [
       "@dillon"
     ]
-    teams_announcement_groups = [
-      "@responders"
-    ]
+    teams_announcement_group = "16cd9a37-4f17-4645-8885-b01c7c4145bf"
     teams_announcement_channels = [
       "#general"
     ]
@@ -161,7 +159,7 @@ Optional:
 - `task_list` (Block Set, Max: 1) Tasks to complete at each status of an incident. (see [below for nested schema](#nestedblock--severity_settings--task_list))
 - `tasks_full_permission_role` (String) Role with full permissions to tasks.
 - `teams_announcement_channels` (List of String) MS Teams channels to notify when an incident is created.
-- `teams_announcement_groups` (List of String) MS Teams groups to notify when an incident is created.
+- `teams_announcement_group` (String) MS Teams group to notify when an incident is created.
 - `teams_invited_users` (List of String) MS Teams team members to automatically recruit into the incident channel.
 
 <a id="nestedblock--severity_settings--task_list"></a>

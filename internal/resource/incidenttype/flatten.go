@@ -32,7 +32,7 @@ func flattenIncidentSeverity(settings *model.IncidentTypeSeverity) map[string]in
 			result["slack_invited_users"] = settings.IncidentSettings.TeamNotifications.SlackInvitedUsers
 			result["slack_announcement_channels"] = settings.IncidentSettings.TeamNotifications.SlackAnnouncementChannels
 			result["teams_invited_users"] = settings.IncidentSettings.TeamNotifications.TeamsInvitedUsers
-			result["teams_announcement_groups"] = settings.IncidentSettings.TeamNotifications.TeamsAnnouncementGroups
+			result["teams_announcement_group"] = settings.IncidentSettings.TeamNotifications.TeamsAnnouncementGroup
 			result["teams_announcement_channels"] = settings.IncidentSettings.TeamNotifications.TeamsAnnouncementChannels
 		}
 	}

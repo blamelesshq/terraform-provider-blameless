@@ -78,11 +78,11 @@ func getIncidentSeverityResource() *schema.Resource {
 					ValidateFunc: validation.StringIsNotWhiteSpace,
 				},
 			},
-			"teams_announcement_groups": {
-				Type:        schema.TypeList,
+			"teams_announcement_group": {
+				Type:        schema.TypeString,
 				Required:    false,
 				Optional:    true,
-				Description: "MS Teams groups to notify when an incident is created.",
+				Description: "MS Teams group to notify when an incident is created.",
 				Elem: &schema.Schema{
 					Type:         schema.TypeString,
 					ValidateFunc: validation.StringIsNotWhiteSpace,
