@@ -28,9 +28,7 @@ resource "blameless_incident_type" "incident_type_security" {
     teams_invited_users = [
       "@dillon"
     ]
-    teams_announcement_groups = [
-      "@responders"
-    ]
+    teams_announcement_group = "16cd9a37-4f17-4645-8885-b01c7c4145bf"
     teams_announcement_channels = [
       "#general"
     ]

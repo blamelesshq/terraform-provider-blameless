@@ -31,7 +31,7 @@ type IncidentTypeSeverityIncidentTeamNotification struct {
 	SlackInvitedUsers         []string `json:"slackInvitedUsers,omitempty"`
 	SlackAnnouncementChannels []string `json:"slackAnnouncementChannels,omitempty"`
 	TeamsInvitedUsers         []string `json:"teamsInvitedUsers,omitempty"`
-	TeamsAnnouncementGroups   []string `json:"teamsAnnouncementGroups,omitempty"`
+	TeamsAnnouncementGroup    *string  `json:"teamsAnnouncementGroup,omitempty"`
 	TeamsAnnouncementChannels []string `json:"teamsAnnouncementChannels,omitempty"`
 }
 
