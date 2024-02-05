@@ -14,7 +14,7 @@ resource "blameless_incident_type" "incident_type_security" {
 
     incident_naming_scheme = "custom"
     require_dash_separator = false
-    custom_channel_format  = "s0-{incident.name}"
+    custom_channel_format  = "{{incident.id}}-{{incident.title}}-{{incident.severity}}-{{incident.status}}-{{incident.created}}"
 
     slack_invited_users = [
       "@dillon"
@@ -82,6 +82,6 @@ resource "blameless_incident_type" "incident_type_security" {
     severity               = 1
     incident_naming_scheme = "custom"
     require_dash_separator = false
-    custom_channel_format  = "s1-{incident.name}"
+    custom_channel_format  = "{{incident.id}}-{{incident.title}}-{{incident.severity}}-{{incident.status}}-{{incident.created}}"
   }
 }
