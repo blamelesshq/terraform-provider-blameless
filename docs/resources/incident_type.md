@@ -27,7 +27,7 @@ resource "blameless_incident_type" "incident_type_security" {
     end_of_customer_impact_status = "RESOLVED"
     private_incident_channel      = false
 
-    incident_naming_scheme = "custom"
+    incident_naming_scheme = "CUSTOM"
     require_dash_separator = false
     custom_channel_format  = "{{incident.id}}-{{incident.title}}-{{incident.severity}}-{{incident.status}}-{{incident.created}}"
 
@@ -98,21 +98,21 @@ resource "blameless_incident_type" "incident_type_security" {
 
   severity_settings {
     severity               = 1
-    incident_naming_scheme = "custom"
+    incident_naming_scheme = "CUSTOM"
     require_dash_separator = false
     custom_channel_format  = "{{incident.id}}-{{incident.title}}-{{incident.severity}}-{{incident.status}}-{{incident.created}}"
   }
 
   severity_settings {
     severity               = 2
-    incident_naming_scheme = "custom"
+    incident_naming_scheme = "CUSTOM"
     require_dash_separator = false
     custom_channel_format  = "{{incident.id}}-{{incident.title}}-{{incident.severity}}-{{incident.status}}-{{incident.created}}"
   }
 
   severity_settings {
     severity               = 3
-    incident_naming_scheme = "custom"
+    incident_naming_scheme = "CUSTOM"
     require_dash_separator = false
     custom_channel_format  = "{{incident.id}}-{{incident.title}}-{{incident.severity}}-{{incident.status}}-{{incident.created}}"
   }
